@@ -38,6 +38,9 @@ class ECSMonitor extends Thread
 	MessageWindow mw = null;				// This is the message window
 	Indicator ti;							// Temperature indicator
 	Indicator hi;							// Humidity indicator
+	Indicator wi;							// Window indicator
+	Indicator di;							// Door indicator
+	Indicator mi;							// Movement indicator
 
 	public ECSMonitor()
 	{
@@ -95,6 +98,9 @@ class ECSMonitor extends Thread
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
 		boolean OFF = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
+		boolean Window = 0;				// Current window status
+		boolean Door = 0;				// Current door status
+		boolean Movement = 0;			// Current movement status
 
 		if (em != null)
 		{
@@ -106,7 +112,10 @@ class ECSMonitor extends Thread
 
 			mw = new MessageWindow("ECS Monitoring Console", 0, 0);
 			ti = new Indicator ("TEMP UNK", mw.GetX()+ mw.Width(), 0);
-			hi = new Indicator ("HUMI UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/2), 2 );
+			hi = new Indicator ("HUMI UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/5), 2 );
+			wi = new Indicator ("WIND UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/5), 3 );
+			di = new Indicator ("DOOR UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/5), 4 );
+			mi = new Indicator ("MOVE UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/5), 5 );
 
 			mw.WriteMessage( "Registered with the event manager." );
 
@@ -191,6 +200,57 @@ class ECSMonitor extends Thread
 
 					} // if
 
+					if ( Evt.GetEventId() == 3 ) // Humidity reading
+					{
+						try
+						{
+				
+							Window = boolean.valueOf(Evt.GetMessage()).booleanValue();
+
+						} // try
+
+						catch( Exception e )
+						{
+							mw.WriteMessage("Error reading window: " + e);
+
+						} // catch
+
+					} // if
+
+					if ( Evt.GetEventId() == 4 ) // Humidity reading
+					{
+						try
+						{
+				
+							Door = boolean.valueOf(Evt.GetMessage()).booleanValue();
+
+						} // try
+
+						catch( Exception e )
+						{
+							mw.WriteMessage("Error reading door: " + e);
+
+						} // catch
+
+					} // if
+
+					if ( Evt.GetEventId() == 5 ) // Humidity reading
+					{
+						try
+						{
+				
+							Movement = boolean.valueOf(Evt.GetMessage()).booleanValue();
+
+						} // try
+
+						catch( Exception e )
+						{
+							mw.WriteMessage("Error reading movement: " + e);
+
+						} // catch
+
+					} // if
+
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
@@ -218,12 +278,16 @@ class ECSMonitor extends Thread
 
 						hi.dispose();
 						ti.dispose();
+						wi.dispose();
+						di.dispose();
+						mi.dispose();
 
 					} // if
 
 				} // for
 
-				mw.WriteMessage("Temperature:: " + CurrentTemperature + "F  Humidity:: " + CurrentHumidity );
+				mw.WriteMessage("Temperature:: " + CurrentTemperature + "F  Humidity:: " + CurrentHumidity +
+					" Window broken: " + Window + " Door broken: " + Door + " Movement detected: " + Movement);
 
 				// Check temperature and effect control as necessary
 
@@ -275,6 +339,21 @@ class ECSMonitor extends Thread
 					} // if
 
 				} // if
+
+				if (Window){
+					wi.SetLampColorAndMessage("WIND BROKEN", 3)
+					Alarm(ON)
+				}
+
+				if (Door){
+					di.SetLampColorAndMessage("DOOR BROKEN", 3)
+					Alarm(ON)
+				}
+
+				if (Movement){
+					mi.SetLampColorAndMessage("MOVE DETECTEDº", 3)
+					Alarm(ON)
+				}
 
 				// This delay slows down the sample rate to Delay milliseconds
 
@@ -578,6 +657,38 @@ class ECSMonitor extends Thread
 		catch (Exception e)
 		{
 			System.out.println("Error sending dehumidifier control message::  " + e);
+
+		} // catch
+
+	} // Dehumidifier
+
+	private void Alarm( boolean ON )
+	{
+		// Here we create the event.
+
+		Event evt;
+
+		if ( ON )
+		{
+			evt = new Event( (int) 5, "A1" );
+
+		} else {
+
+			evt = new Event( (int) 5, "A0" );
+
+		} // if
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			em.SendEvent( evt );
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending Alarm control message::  " + e);
 
 		} // catch
 
