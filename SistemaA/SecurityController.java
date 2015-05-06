@@ -1,24 +1,20 @@
 /******************************************************************************************************************
-* File:TemperatureController.java
-* Course: 17655
-* Project: Assignment A3
-* Copyright: Copyright (c) 2009 Carnegie Mellon University
-* Versions:
-*	1.0 March 2009 - Initial rewrite of original assignment 3 (ajl).
+* File:SecurityController.java
 *
 * Description:
 *
-* This class simulates a device that controls a heater and chiller. It polls the event manager for event ids = 5
-* and reacts to them by turning on or off the heater or chiller. The following command are valid strings for con
-* trolling the heater and chiller:
+* This class simulates the events window broken, door broken and movement detection. It polls the event manager for event
+* ids = 6 and reacts to them by ... The following command are valid
+* strings for controlling the security events
 *
-*	H1 = heater on
-*	H0 = heater off
-*	C1 = chiller on
-*	C0 = chiller off
+*	S1 = Security system on
+*	S0 = Securyty system off
+*	S2 = Window broken
+*	S3 = Door broken
+*   S4 = Movement detection
 *
 * The state (on/off) is graphically displayed on the terminal in the indicator. Command messages are displayed in
-* the message window. Once a valid command is recieved a confirmation event is sent with the id of -5 and the command in
+* the message window. Once a valid command is recieved a confirmation event is sent with the id of -6 and the command in
 * the command string.
 *
 * Parameters: IP address of the event manager (on command line). If blank, it is assumed that the event manager is
@@ -30,21 +26,23 @@
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
 import EventPackage.*;
-import java.util.*;
 
-class TemperatureController
+class SecurityController
 {
 	public static void main(String args[])
 	{
-		String EvtMgrIP;				// Event Manager IP address
-		Event Evt = null;				// Event object
-		EventQueue eq = null;			// Message Queue
-		int EvtId = 0;					// User specified event ID
-		EventManagerInterface em = null;// Interface object to the event manager
-		boolean HeaterState = false;	// Heater state: false == off, true == on
-		boolean ChillerState = false;	// Chiller state: false == off, true == on
-		int	Delay = 2500;				// The loop delay (2.5 seconds)
-		boolean Done = false;			// Loop termination flag
+		String EvtMgrIP;					// Event Manager IP address
+		Event Evt = null;					// Event object
+		EventQueue eq = null;				// Message Queue
+		int EvtId = 0;						// User specified event ID
+		EventManagerInterface em = null;	// Interface object to the event manager
+		
+		boolean SecurityActive = false;		// Security System state: false = inactive, true active
+		boolean WindowBroken = false;		// Window state: false == not broken, true == broken
+		boolean DoorBroken = false;			// Door state: false == not broken, true == broken
+		boolean MoveDetection = false;		// Movement detection state: false == no detection, true == detection
+		int	Delay = 2500;					// The loop delay (2.5 seconds)
+		boolean Done = false;				// Loop termination flag
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Get the IP address of the event manager
@@ -94,29 +92,31 @@ class TemperatureController
 
 		} // if
 
-		// Here we check to see if registration worked. If ef is null then the
+		// Here we check to see if registration worked. If em is null then the
 		// event manager interface was not properly created.
 
 		if (em != null)
 		{
+
+			/*
 			System.out.println("Registered with the event manager." );
 
-			/* Now we create the temperature control status and message panel
-			** We put this panel about 1/3 the way down the terminal, aligned to the left
+			/* Now we create the humidity control status and message panel
+			** We put this panel about 2/3s the way down the terminal, aligned to the left
 			** of the terminal. The status indicators are placed directly under this panel
-			*/
+			/
 
 			float WinPosX = 0.0f; 	//This is the X position of the message window in terms 
-								 	//of a percentage of the screen height
-			float WinPosY = 0.3f; 	//This is the Y position of the message window in terms 
+									//of a percentage of the screen height
+			float WinPosY = 0.60f;	//This is the Y position of the message window in terms 
 								 	//of a percentage of the screen height 
 			
-			MessageWindow mw = new MessageWindow("Temperature Controller Status Console", WinPosX, WinPosY);
-			
-			// Put the status indicators under the panel...
-			
-			Indicator ci = new Indicator ("Chiller OFF", mw.GetX(), mw.GetY()+mw.Height());
-			Indicator hi = new Indicator ("Heater OFF", mw.GetX()+(ci.Width()*2), mw.GetY()+mw.Height());
+			MessageWindow mw = new MessageWindow("Humidity Controller Status Console", WinPosX, WinPosY);
+
+			// Now we put the indicators directly under the humitity status and control panel
+						
+			Indicator hi = new Indicator ("Humid OFF", mw.GetX(), mw.GetY()+mw.Height());
+			Indicator di = new Indicator ("DeHumid OFF", mw.GetX()+(hi.Width()*2), mw.GetY()+mw.Height());
 
 			mw.WriteMessage("Registered with the event manager." );
 
@@ -132,6 +132,8 @@ class TemperatureController
 				System.out.println("Error:: " + e);
 
 			} // catch
+			
+			*/
 
 			/********************************************************************
 			** Here we start the main simulation loop
@@ -139,7 +141,6 @@ class TemperatureController
 
 			while ( !Done )
 			{
-
 				try
 				{
 					eq = em.GetEventQueue();
@@ -148,17 +149,18 @@ class TemperatureController
 
 				catch( Exception e )
 				{
-					mw.WriteMessage("Error getting event queue::" + e );
+					//mw.WriteMessage("Error getting event queue::" + e );
+					System.out.println("Error getting event queue:: "+e);
 
 				} // catch
 
 				// If there are messages in the queue, we read through them.
-				// We are looking for EventIDs = 5, this is a request to turn the
-				// heater or chiller on. Note that we get all the messages
+				// We are looking for EventIDs = 6, this is a request to turn the
+				// security on/off and the security events: Window broken, Door broken,Movement detection
 				// at once... there is a 2.5 second delay between samples,.. so
 				// the assumption is that there should only be a message at most.
 				// If there are more, it is the last message that will effect the
-				// output of the temperature as it would in reality.
+				// output of the humidity as it would in reality.
 
 				int qlen = eq.GetSize();
 
@@ -166,51 +168,57 @@ class TemperatureController
 				{
 					Evt = eq.GetEvent();
 
-					if ( Evt.GetEventId() == 5 )
+					if ( Evt.GetEventId() == 6 )
 					{
-						if (Evt.GetMessage().equalsIgnoreCase("H1")) // heater on
+						if (Evt.GetMessage().equalsIgnoreCase("S1")) // Security on
 						{
-							HeaterState = true;
-							mw.WriteMessage("Received heater on event" );
+							SecurityActive = true;
+							//mw.WriteMessage("Received humidifier on event" );
 
 							// Confirm that the message was recieved and acted on
-
 							ConfirmMessage( em, "H1" );
 
 						} // if
 
-						if (Evt.GetMessage().equalsIgnoreCase("H0")) // heater off
+						if (Evt.GetMessage().equalsIgnoreCase("S0")) // Security off
 						{
-							HeaterState = false;
-							mw.WriteMessage("Received heater off event" );
+							SecurityActive = false;
+							//mw.WriteMessage("Received humidifier off event" );
 
-							// Confirm that the message was recieved and acted on
-
-							ConfirmMessage( em, "H0" );
+							//Confirm that the message was recieved and acted on
+							ConfirmMessage( em, "S0" );
 
 						} // if
 
-						if (Evt.GetMessage().equalsIgnoreCase("C1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("S2")) // Window broken
 						{
-							ChillerState = true;
-							mw.WriteMessage("Received chiller on event" );
+							WindowBroken = true;
+							//mw.WriteMessage("Received dehumidifier on event" );
 
 							// Confirm that the message was recieved and acted on
-
-							ConfirmMessage( em, "C1" );
+							ConfirmMessage( em, "S2" );
 
 						} // if
 
-						if (Evt.GetMessage().equalsIgnoreCase("C0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("S3")) // Door broken
 						{
-							ChillerState = false;
-							mw.WriteMessage("Received chiller off event" );
+							DoorBroken = true;
+							//mw.WriteMessage("Received dehumidifier off event" );
 
 							// Confirm that the message was recieved and acted on
-
-							ConfirmMessage( em, "C0" );
+							ConfirmMessage( em, "S3" );
 
 						} // if
+						if (Evt.GetMessage().equalsIgnoreCase("S4")) // Movement Detection
+						{
+							MoveDetection = true;
+							//mw.WriteMessage("Received dehumidifier off event" );
+
+							// Confirm that the message was recieved and acted on
+							ConfirmMessage( em, "S4" );
+
+						} // if
+
 
 					} // if
 
@@ -230,17 +238,17 @@ class TemperatureController
 
 				    	catch (Exception e)
 				    	{
-							mw.WriteMessage("Error unregistering: " + e);
+							//mw.WriteMessage("Error unregistering: " + e);
 
 				    	} // catch
 
-				    	mw.WriteMessage( "\n\nSimulation Stopped. \n");
+				    	//mw.WriteMessage( "\n\nSimulation Stopped. \n");
 
 						// Get rid of the indicators. The message panel is left for the
 						// user to exit so they can see the last message posted.
 
-						hi.dispose();
-						ci.dispose();
+						//hi.dispose();
+						//di.dispose();
 
 					} // if
 
@@ -248,32 +256,34 @@ class TemperatureController
 
 				// Update the lamp status
 
-				if (HeaterState)
+				/*
+				if (HumidifierState)
 				{
-					// Set to green, heater is on
+					// Set to green, humidifier is on
 
-					hi.SetLampColorAndMessage("HEATER ON", 1);
+					hi.SetLampColorAndMessage("HUMID ON", 1);
 
 				} else {
 
-					// Set to black, heater is off
-					hi.SetLampColorAndMessage("HEATER OFF", 0);
+					// Set to black, humidifier is off
+					hi.SetLampColorAndMessage("HUMID OFF", 0);
 
 				} // if
 
-				if (ChillerState)
+				if (DehumidifierState)
 				{
-					// Set to green, chiller is on
+					// Set to green, dehumidifier is on
 
-					ci.SetLampColorAndMessage("CHILLER ON", 1);
+					di.SetLampColorAndMessage("DEHUMID ON", 1);
 
 				} else {
 
-					// Set to black, chiller is off
+					// Set to black, dehumidifier is off
 
-					ci.SetLampColorAndMessage("CHILLER OFF", 0);
+					di.SetLampColorAndMessage("DEHUMID OFF", 0);
 
 				} // if
+				*/
 
 				try
 				{
@@ -300,7 +310,7 @@ class TemperatureController
 	/***************************************************************************
 	* CONCRETE METHOD:: ConfirmMessage
 	* Purpose: This method posts the specified message to the specified event
-	* manager. This method assumes an event ID of -5 which indicates a confirma-
+	* manager. This method assumes an event ID of -4 which indicates a confirma-
 	* tion of a command.
 	*
 	* Arguments: EventManagerInterface ei - this is the eventmanger interface
@@ -318,7 +328,7 @@ class TemperatureController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) -5, m );
+		Event evt = new Event( (int) -6, m );
 
 		// Here we send the event to the event manager.
 
@@ -336,4 +346,4 @@ class TemperatureController
 
 	} // PostMessage
 
-} // TemperatureController
+} // HumidityControllers
