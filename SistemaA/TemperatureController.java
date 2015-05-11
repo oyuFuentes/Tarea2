@@ -14,7 +14,7 @@
 *
 *	H1 = heater on
 *	H0 = heater off
-*	C1 = chiller on
+*	C1 = chillerer on
 *	C0 = chiller off
 *
 * The state (on/off) is graphically displayed on the terminal in the indicator. Command messages are displayed in

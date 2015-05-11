@@ -1,45 +1,24 @@
 /******************************************************************************************************************
-* File:ECSMonitor.java
-* Course: 17655
-* Project: Assignment A3
-* Copyright: Copyright (c) 2009 Carnegie Mellon University
-* Versions:
-*	1.0 March 2009 - Initial rewrite of original assignment 3 (ajl).
-*
-* Description:
-*
-* This class monitors the environmental control systems that control museum temperature and humidity. In addition to
-* monitoring the temperature and humidity, the ECSMonitor also allows a user to set the humidity and temperature
-* ranges to be maintained. If temperatures exceed those limits over/under alarm indicators are triggered.
-*
-* Parameters: IP address of the event manager (on command line). If blank, it is assumed that the event manager is
-* on the local machine.
-*
-* Internal Methods:
-*	static private void Heater(EventManagerInterface ei, boolean ON )
-*	static private void Chiller(EventManagerInterface ei, boolean ON )
-*	static private void Humidifier(EventManagerInterface ei, boolean ON )
-*	static private void Dehumidifier(EventManagerInterface ei, boolean ON )
-*
+* File:ECSSecurityMonitor.java
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
 import EventPackage.*;
 import java.util.*;
 
-class ECSMonitor extends Thread
+class ECSSecurityMonitor extends Thread
 {
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
-	private float TempRangeHigh = 100;		// These parameters signify the temperature and humidity ranges in terms
-	private float TempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
-	private float HumiRangeHigh = 100;		// this temperature and humidity. Temperatures are in degrees Fahrenheit
-	private float HumiRangeLow = 0;			// and humidity is in relative humidity percentage.
-	boolean Registered = true;				// Signifies that this class is registered with an event manager.
+//	private float TempRangeHigh = 100;		// These parameters signify the temperature and humidity ranges in terms
+//	private float TempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
+//	private float HumiRangeHigh = 100;		// this temperature and humidity. Temperatures are in degrees Fahrenheit
+//	private float HumiRangeLow = 0;			// and humidity is in relative humidity percentage.
+//	boolean Registered = true;				// Signifies that this class is registered with an event manager.
 	MessageWindow mw = null;				// This is the message window
-	Indicator ti;							// Temperature indicator
-	Indicator hi;							// Humidity indicator
+//	Indicator ti;							// Temperature indicator
+//	Indicator hi;							// Humidity indicator
 
-	public ECSMonitor()
+	public ECSSecurityMonitor()
 	{
 		// event manager is on the local system
 
@@ -54,14 +33,14 @@ class ECSMonitor extends Thread
 
 		catch (Exception e)
 		{
-			System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
+			System.out.println("ECSSecurityMonitor::Error instantiating event manager interface: " + e);
 			Registered = false;
 
 		} // catch
 
 	} //Constructor
 
-	public ECSMonitor( String EvmIpAddress )
+	public ECSSecurityMonitor( String EvmIpAddress )
 	{
 		// event manager is not on the local system
 
@@ -77,7 +56,7 @@ class ECSMonitor extends Thread
 
 		catch (Exception e)
 		{
-			System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
+			System.out.println("ECSSecurityMonitor::Error instantiating event manager interface: " + e);
 			Registered = false;
 
 		} // catch
@@ -93,8 +72,8 @@ class ECSMonitor extends Thread
 		float CurrentHumidity= 0;		// Current relative humidity as reported by the humidity sensor
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
-		boolean ON = true;				// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
-		boolean OFF = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
+		boolean ON = true;				// Used to turn Security
+		boolean OFF = false;			// Used to turn off Security
 
 		if (em != null)
 		{
