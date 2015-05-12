@@ -1,11 +1,11 @@
 /******************************************************************************************************************
-* File:ECSSecurityMonitor.java
+* File:SecurityMonitor.java
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
 import EventPackage.*;
 import java.util.*;
 
-class ECSSecurityMonitor extends Thread
+class SecurityMonitor extends Thread
 {
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
@@ -16,7 +16,7 @@ class ECSSecurityMonitor extends Thread
 	Indicator di;							// Door broken indicator
 	Indicator mi;							// Movement detection indicator
 
-	public ECSSecurityMonitor()
+	public SecurityMonitor()
 	{
 		// event manager is on the local system
 
@@ -38,7 +38,7 @@ class ECSSecurityMonitor extends Thread
 
 	} //Constructor
 
-	public ECSSecurityMonitor( String EvmIpAddress )
+	public SecurityMonitor( String EvmIpAddress )
 	{
 		// event manager is not on the local system
 
@@ -85,8 +85,8 @@ class ECSSecurityMonitor extends Thread
 			mw = new MessageWindow("ECS Security Monitoring Console", 0, 0);
 			
 			wi = new Indicator ("Window Broken",mw.GetX()+ mw.Width(), 0);			
-			di = new Indicator ("Door Broken", mw.GetX()+ mw.Width(), 0);
-			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), mw.Height(), 2 );
+			di = new Indicator ("Door Broken", mw.GetX()+ mw.Width(), wi.Height());
+			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), di.Height()*2, 2 );
 						
 			mw.WriteMessage( "Registered with the event manager." );
 
@@ -196,7 +196,7 @@ class ECSSecurityMonitor extends Thread
 						if(choice.equalsIgnoreCase("W1")){ //Window
 
 							mw.WriteMessage("Security:: ¡ALERT! Window broken");												
-							wi.SetLampColorAndMessage("Window OK", 3); // Window is broken
+							wi.SetLampColorAndMessage("Window broken", 3); // Window is broken
 
 						} 
 						if (choice.equalsIgnoreCase("W0")){
@@ -209,7 +209,7 @@ class ECSSecurityMonitor extends Thread
 						if(choice.equalsIgnoreCase("D1")){
 
 							mw.WriteMessage("Security:: ¡ALERT! Door broken");
-							di.SetLampColorAndMessage("Door OK", 3); // Door is broken
+							di.SetLampColorAndMessage("Door Broken", 3); // Door is broken
 
 						} 
 						if(choice.equalsIgnoreCase("D0")) {
@@ -222,7 +222,7 @@ class ECSSecurityMonitor extends Thread
 						if(choice.equalsIgnoreCase("M1")){
 
 							mw.WriteMessage("Security:: ¡ALERT! Movement detection");
-							mi.SetLampColorAndMessage("Movement OK", 3); // Movement detection
+							mi.SetLampColorAndMessage("Movement Broken", 3); // Movement detection
 
 						} 
 						if(choice.equalsIgnoreCase("M0")) {
@@ -335,6 +335,7 @@ class ECSSecurityMonitor extends Thread
 
 	public void eventSensor(String messageTxt)
 	{
+		System.out.println("Enters here "+messageTxt);
 		// Here we create the event.
 
 		Event evt;

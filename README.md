@@ -17,3 +17,8 @@ EMStart.bat
 ```
 ECStart.bat
 ```
+
+Start ONLY the security System
+```
+ESecurityStart.bat
+```

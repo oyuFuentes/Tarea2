@@ -91,8 +91,8 @@ class SecurityController
 			// Put the status indicators under the panel...
 			
 			Indicator wi = new Indicator ("WindowState OFF", mw.GetX(), mw.GetY()+mw.Height());
-			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
-			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
+			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
+			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(di.Width()*6), mw.GetY()+mw.Height());
 
 			mw.WriteMessage("Registered with the event manager." );
 
@@ -137,6 +137,8 @@ class SecurityController
 				// output of the temperature as it would in reality.
 
 				int qlen = eq.GetSize();
+				
+				System.out.println("qlen = "+qlen);
 
 				for ( int i = 0; i < qlen; i++ )
 				{
@@ -163,7 +165,7 @@ class SecurityController
 
 							if (choice.equalsIgnoreCase("D1")) // chiller on
 							{
-								Doortate = true;
+								DoorState = true;
 								
 
 							} // if
@@ -177,14 +179,14 @@ class SecurityController
 
 							if (choice.equalsIgnoreCase("M1")) // chiller on
 							{
-								Doortate = true;
+								MovementState = true;
 								
 
 							} // if
 
 							if (choice.equalsIgnoreCase("M0")) // chiller off
 							{
-								DoorState = false;
+								MovementState = false;
 
 							} // if
 
@@ -237,12 +239,12 @@ class SecurityController
 				{
 					// Set to green, heater is on
 
-					hi.SetLampColorAndMessage("WINDOW ON", 1);
+					wi.SetLampColorAndMessage("WINDOW ON", 1);
 
 				} else {
 
 					// Set to black, heater is off
-					hi.SetLampColorAndMessage("WINDOW OFF", 0);
+					wi.SetLampColorAndMessage("WINDOW OFF", 0);
 
 				} // if
 
@@ -250,13 +252,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					ci.SetLampColorAndMessage("DOOR ON", 1);
+					di.SetLampColorAndMessage("DOOR ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					ci.SetLampColorAndMessage("DOOR OFF", 0);
+					di.SetLampColorAndMessage("DOOR OFF", 0);
 
 				} // if
 
@@ -264,13 +266,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					ci.SetLampColorAndMessage("Movement ON", 1);
+					mi.SetLampColorAndMessage("Movement ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					ci.SetLampColorAndMessage("Movement OFF", 0);
+					mi.SetLampColorAndMessage("Movement OFF", 0);
 
 				} // if
 

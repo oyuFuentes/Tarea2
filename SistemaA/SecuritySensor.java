@@ -16,6 +16,7 @@ class SecuritySensor
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
+		String CurrentState;			// The current state
 		boolean WindowState = false;	// Heater state: false == off, true == on
 		boolean DoorState = false;		// Chiller state: false == off, true == on
 		boolean MovementState = false;	// The amount of temperature gained or lost
@@ -163,7 +164,7 @@ class SecuritySensor
 
 							if (choice.equalsIgnoreCase("D1")) // chiller on
 							{
-								Doortate = true;
+								DoorState = true;
 								
 
 							} // if
@@ -177,7 +178,7 @@ class SecuritySensor
 
 							if (choice.equalsIgnoreCase("M1")) // chiller on
 							{
-								Doortate = true;
+								DoorState = true;
 								
 
 							} // if
@@ -252,7 +253,7 @@ class SecuritySensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 1, currentState );
+		Event evt = new Event( (int) 3, currentState );
 
 		// Here we send the event to the event manager.
 

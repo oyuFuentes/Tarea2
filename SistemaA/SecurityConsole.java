@@ -1,5 +1,5 @@
 /******************************************************************************************************************
-* File:ECSConsole.java
+* File:SecurityConsole.java
 * Course: 17655
 * Project: Assignment 3
 * Copyright: Copyright (c) 2009 Carnegie Mellon University
@@ -29,7 +29,8 @@ public class SecurityConsole {
 		boolean Done = false;				// Main loop flag
 		String Option = null;				// Menu choice from user
 		boolean Error = false;				// Error flag
-		ECSSecurityMonitor Monitor = null;	// The environmental control system monitor
+		SecurityMonitor Monitor = null;	// The environmental control system monitor
+		String CurrentState;
 		String WindowState = "W0";
 		String DoorState = "D0";
 		String MovementState = "M0";
@@ -44,11 +45,11 @@ public class SecurityConsole {
  		{
 			// event manager is not on the local system
 
-			Monitor = new ECSSecurityMonitor( args[0] );
+			Monitor = new SecurityMonitor( args[0] );
 
 		} else {
 
-			Monitor = new ECSSecurityMonitor();
+			Monitor = new SecurityMonitor();
 
 		} // if
 
@@ -65,7 +66,7 @@ public class SecurityConsole {
 				// Here, the main thread continues and provides the main menu
 
 				System.out.println( "\n\n\n\n" );
-				System.out.println( "Environmental Control Security System (ECSSecurity) Command Console: \n" );
+				System.out.println( "Environmental Control Security System Command Console: \n" );
 
 				if (args.length != 0)
 					System.out.println( "Using event manger at: " + args[0] + "\n" );
@@ -111,7 +112,7 @@ public class SecurityConsole {
 
 				if ( Option.equals( "3" ) )
 				{
-					Error = True
+					Error = true;
 
 					while (Error)
 					{
@@ -120,10 +121,14 @@ public class SecurityConsole {
 
 						if (UserInput.IsNumber(Option))
 						{
-							if( -1 < Float.valueOf(Option).floatValue() < 2){
+							int opt = Integer.parseInt(Option);
+							if(opt == 0 || opt == 1){
 								Error = false;
-								Act_Dea = Integer.parseInt(Option);;
-								Monitor.eventSensor("W"+Act_Dea+DoorState+MovementState);
+								Act_Dea = Integer.parseInt(Option);								
+								WindowState = "W"+Act_Dea;
+								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);								
+
+
 							}
 							
 
@@ -140,7 +145,7 @@ public class SecurityConsole {
 
 				if ( Option.equals( "4" ) )
 				{
-					Error = True
+					Error = true;
 
 					while (Error)
 					{
@@ -149,10 +154,13 @@ public class SecurityConsole {
 
 						if (UserInput.IsNumber(Option))
 						{
-							if( -1 < Float.valueOf(Option).floatValue() < 2){
+							int opt = Integer.parseInt(Option);
+							if(opt == 0 || opt == 1){													
 								Error = false;
 								Act_Dea = Integer.parseInt(Option);
-								Monitor.eventSensor(WindowState+"D"+Act_Dea+MovementState);
+								
+								DoorState = "D"+Act_Dea;
+								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);								
 							}
 							
 
@@ -169,7 +177,7 @@ public class SecurityConsole {
 
 				if ( Option.equals( "5" ) )
 				{
-					Error = True
+					Error = true;
 
 					while (Error)
 					{
@@ -178,10 +186,12 @@ public class SecurityConsole {
 
 						if (UserInput.IsNumber(Option))
 						{
-							if( -1 < Float.valueOf(Option).floatValue() < 2){
+							int opt = Integer.parseInt(Option);
+							if(opt == 0 || opt == 1){
 								Error = false;
 								Act_Dea = Integer.parseInt(Option);;
-								Monitor.eventSensor(WindowState+DoorState+"M"+Act_Dea);
+								MovementState ="M"+Act_Dea;
+								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);
 							}
 							
 
