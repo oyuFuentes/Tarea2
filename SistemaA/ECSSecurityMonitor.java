@@ -107,7 +107,7 @@ class ECSSecurityMonitor extends Thread
 			** Here we start the main simulation loop
 			*********************************************************************/
 
-			while ( !Done || )
+			while ( !Done )
 			{
 				if(!isActive)
 					break;
@@ -191,27 +191,27 @@ class ECSSecurityMonitor extends Thread
 
 				if(CurrentState.equals("S2")){ //Window
 					mw.WriteMessage("Security:: Window broken: False");
-					wi.SetLampColorAndMessage("TEMP OK", 1); // Window is ok
+					wi.SetLampColorAndMessage("Window OK", 1); // Window is ok
 				}				
 				else{
 					mw.WriteMessage("Security:: ¡ALERT! Window broken");												
-					wi.SetLampColorAndMessage("TEMP OK", 3); // Window is broken
+					wi.SetLampColorAndMessage("Window OK", 3); // Window is broken
 				}
 				if(CurrentState.equals("S3")){
 					mw.WriteMessage("Security:: Door broken: False");
-					di.SetLampColorAndMessage("TEMP OK", 1); // Door is ok
+					di.SetLampColorAndMessage("Door OK", 1); // Door is ok
 				}					
 				else{
 					mw.WriteMessage("Security:: ¡ALERT! Door broken");
-					di.SetLampColorAndMessage("TEMP OK", 3); // Door is broken
+					di.SetLampColorAndMessage("Door OK", 3); // Door is broken
 				}								
 				if(CurrentState.equals("S4")){
 					mw.WriteMessage("Security:: Movement detection: False");
-					mi.SetLampColorAndMessage("TEMP OK", 1); // Movement is ok
+					mi.SetLampColorAndMessage("Movement OK", 1); // Movement is ok
 				}				
 				else{
 					mw.WriteMessage("Security:: ¡ALERT! Movement detection");
-					mi.SetLampColorAndMessage("TEMP OK", 3); // Movement detection
+					mi.SetLampColorAndMessage("Movement OK", 3); // Movement detection
 				}									
 								
 				// This delay slows down the sample rate to Delay milliseconds

@@ -86,7 +86,7 @@ public class SecurityConsole {
 						   */
 							
 					System.out.print( "\n Reportando instrucciones de seguridad>>> " );
-					Monitor.Activate()
+					Monitor.Activate();
 
 				} // if
 
@@ -97,7 +97,7 @@ public class SecurityConsole {
 					// Here we get the humidity ranges
 					// Cuando esta desactivado, los eventos de seguridad no se reportan
 					// Simular eventos de seguridad					
-					Monitor.Desactivate()
+					Monitor.Desactivate();
 
 
 				} // if
