@@ -28,11 +28,8 @@ public class SecurityConsole {
     	Termio UserInput = new Termio();	// Termio IO Object, keyboard
 		boolean Done = false;				// Main loop flag
 		String Option = null;				// Menu choice from user
-		//Event Evt = null;					// Event object
-		//boolean Error = false;				// Error flag
 		
 		ECSSecurityMonitor Monitor = null;			// The environmental control system monitor
-		boolean manageSystem = false;        // Activate and deactivate system, on = true, off = false
 		
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -89,8 +86,7 @@ public class SecurityConsole {
 						   */
 							
 					System.out.print( "\n Reportando instrucciones de seguridad>>> " );
-					manageSystem = true;
-					//monitor
+					Monitor.Activate()
 
 				} // if
 
@@ -100,9 +96,8 @@ public class SecurityConsole {
 				{
 					// Here we get the humidity ranges
 					// Cuando esta desactivado, los eventos de seguridad no se reportan
-					// Simular eventos de seguridad
-					manageSystem = false;					
-					//monitor
+					// Simular eventos de seguridad					
+					Monitor.Desactivate()
 
 
 				} // if
