@@ -91,8 +91,8 @@ class SecurityController
 			// Put the status indicators under the panel...
 			
 			Indicator wi = new Indicator ("WindowState OFF", mw.GetX(), mw.GetY()+mw.Height());
-			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
-			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
+			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
+			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
 
 			mw.WriteMessage("Registered with the event manager." );
 
@@ -168,7 +168,7 @@ class SecurityController
 
 						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
 						{
-							Doortate = true;
+							DoorState = true;
 							mw.WriteMessage("Received door on event" );
 
 							// Confirm that the message was recieved and acted on
@@ -190,7 +190,7 @@ class SecurityController
 
 						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
 						{
-							Doortate = true;
+							DoorState = true;
 							mw.WriteMessage("Received movement on event" );
 
 							// Confirm that the message was recieved and acted on
@@ -251,26 +251,26 @@ class SecurityController
 				{
 					// Set to green, heater is on
 
-					hi.SetLampColorAndMessage("WINDOW ON", 1);
+					wi.SetLampColorAndMessage("WINDOW ON", 1);
 
 				} else {
 
 					// Set to black, heater is off
-					hi.SetLampColorAndMessage("WINDOW OFF", 0);
+					wi.SetLampColorAndMessage("WINDOW OFF", 0);
 
 				} // if
 
 				if (DoorState)
 				{
-					// Set to green, chiller is on
+					// Set to green, chill is on
 
-					ci.SetLampColorAndMessage("DOOR ON", 1);
+					di.SetLampColorAndMessage("DOOR ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					ci.SetLampColorAndMessage("DOOR OFF", 0);
+					di.SetLampColorAndMessage("DOOR OFF", 0);
 
 				} // if
 
@@ -278,13 +278,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					ci.SetLampColorAndMessage("Movement ON", 1);
+					mi.SetLampColorAndMessage("Movement ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					ci.SetLampColorAndMessage("Movement OFF", 0);
+					mi.SetLampColorAndMessage("Movement OFF", 0);
 
 				} // if
 

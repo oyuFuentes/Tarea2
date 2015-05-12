@@ -10,3 +10,10 @@ START "HUMIDITY CONTROLLER CONSOLE" /MIN /NORMAL java HumidityController %1
 START "TEMPERATURE SENSOR CONSOLE" /MIN /NORMAL java TemperatureSensor %1
 %ECHO Starting Humidity Sensor Console
 START "HUMIDITY SENSOR CONSOLE" /MIN /NORMAL java HumiditySensor %1
+
+%ECHO Starting Security Sensor Console
+START "SECURITY SENSOR CONSOLE" /MIN /NORMAL java SecuritySensor %1
+
+%ECHO Starting Security Controller Console
+START "SECURITY CONTROLLER CONSOLE" /MIN /NORMAL java SecurityController %1
+

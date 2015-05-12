@@ -10,7 +10,8 @@ class ECSSecurityMonitor extends Thread
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
 	boolean Registered = true;				// Signifies that this class is registered with an event manager.	
-	MessageWindow mw = null;				// This is the message window
+	boolean isActive = true;				// Signifies if monitoring security is active
+	MessageWindow mw = null;				// This is the message window	
 	Indicator wi;							// Window broken indicator
 	Indicator di;							// Door broken indicator
 	Indicator mi;							// Movement detection indicator
@@ -106,8 +107,11 @@ class ECSSecurityMonitor extends Thread
 			** Here we start the main simulation loop
 			*********************************************************************/
 
-			while ( !Done )
+			while ( !Done || )
 			{
+				if(!isActive)
+					break;
+					
 				// Here we get our event queue from the event manager
 
 				try
@@ -291,5 +295,15 @@ class ECSSecurityMonitor extends Thread
 		} // catch
 
 	} // Halt
+	
+	public void Activate()
+	{
+		isActive = true;		
+	} // Activate
+	
+	public void Desactivate()
+	{
+		isActive = false;
+	} // Desactivate
 	
 } // ECSMonitor

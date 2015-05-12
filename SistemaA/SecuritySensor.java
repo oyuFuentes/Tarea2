@@ -16,7 +16,8 @@ class SecuritySensor
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
-		boolean WindowState = false;	// Heater state: false == off, true == on
+		String CurrentState = ""; 		// Current state of
+		boolean WindowState = false;	// Heater state: false == off, true == on		
 		boolean DoorState = false;		// Chiller state: false == off, true == on
 		boolean MovementState = false;	// The amount of temperature gained or lost
 		int	Delay = 2500;				// The loop delay (2.5 seconds)
@@ -237,7 +238,7 @@ class SecuritySensor
 	} // main
 
 
-	static private void PostState(EventManagerInterface ei, float currentState )
+	static private void PostState(EventManagerInterface ei, String currentState )
 	{
 		// Here we create the event.
 

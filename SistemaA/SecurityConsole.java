@@ -31,7 +31,7 @@ public class SecurityConsole {
 		//Event Evt = null;					// Event object
 		//boolean Error = false;				// Error flag
 		
-		SecurityMonitor Monitor = null;			// The environmental control system monitor
+		ECSSecurityMonitor Monitor = null;			// The environmental control system monitor
 		boolean manageSystem = false;        // Activate and deactivate system, on = true, off = false
 		
 
@@ -43,11 +43,11 @@ public class SecurityConsole {
  		{
 			// event manager is not on the local system
 
-			Monitor = new SecurityMonitor( args[0] );
+			Monitor = new ECSSecurityMonitor( args[0] );
 
 		} else {
 
-			Monitor = new SecurityMonitor();
+			Monitor = new ECSSecurityMonitor();
 
 		} // if
 
@@ -101,7 +101,7 @@ public class SecurityConsole {
 					// Here we get the humidity ranges
 					// Cuando esta desactivado, los eventos de seguridad no se reportan
 					// Simular eventos de seguridad
-					manageSystem = false;
+					manageSystem = false;					
 					//monitor
 
 
