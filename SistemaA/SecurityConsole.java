@@ -28,8 +28,12 @@ public class SecurityConsole {
     	Termio UserInput = new Termio();	// Termio IO Object, keyboard
 		boolean Done = false;				// Main loop flag
 		String Option = null;				// Menu choice from user
-		
-		ECSSecurityMonitor Monitor = null;			// The environmental control system monitor
+		boolean Error = false;				// Error flag
+		ECSSecurityMonitor Monitor = null;	// The environmental control system monitor
+		String WindowState = "W0";
+		String DoorState = "D0";
+		String MovementState = "M0";
+		int Act_Dea = 0;
 		
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +76,9 @@ public class SecurityConsole {
 				System.out.println( "Select an Option: \n" );
 				System.out.println( "1: Activate" );
 				System.out.println( "2: Deactivate" );
+				System.out.println( "3: Set Window" );
+				System.out.println( "4: Set Door" );
+				System.out.println( "5: Set Movement" );
 				System.out.println( "X: Stop System\n" );
 				System.out.print( "\n>>>> " );
 				Option = UserInput.KeyboardReadString();
@@ -98,6 +105,93 @@ public class SecurityConsole {
 					// Cuando esta desactivado, los eventos de seguridad no se reportan
 					// Simular eventos de seguridad					
 					Monitor.Desactivate();
+
+
+				} // if
+
+				if ( Option.equals( "3" ) )
+				{
+					Error = True
+
+					while (Error)
+					{
+						System.out.print( "\nEnter 1/0 to activate or deactivate window >>> " );
+						Option = UserInput.KeyboardReadString();
+
+						if (UserInput.IsNumber(Option))
+						{
+							if( -1 < Float.valueOf(Option).floatValue() < 2){
+								Error = false;
+								Act_Dea = Integer.parseInt(Option);;
+								Monitor.eventSensor("W"+Act_Dea+DoorState+MovementState);
+							}
+							
+
+						} else {
+
+							System.out.println( "Not a valid option, please try again..." );
+
+						} // if
+
+					} // while
+
+
+				} // if
+
+				if ( Option.equals( "4" ) )
+				{
+					Error = True
+
+					while (Error)
+					{
+						System.out.print( "\nEnter 1/0 to activate or deactivate door >>> " );
+						Option = UserInput.KeyboardReadString();
+
+						if (UserInput.IsNumber(Option))
+						{
+							if( -1 < Float.valueOf(Option).floatValue() < 2){
+								Error = false;
+								Act_Dea = Integer.parseInt(Option);
+								Monitor.eventSensor(WindowState+"D"+Act_Dea+MovementState);
+							}
+							
+
+						} else {
+
+							System.out.println( "Not a valid option, please try again..." );
+
+						} // if
+
+					} // while
+
+
+				} // if
+
+				if ( Option.equals( "5" ) )
+				{
+					Error = True
+
+					while (Error)
+					{
+						System.out.print( "\nEnter 1/0 to activate or deactivate movement >>> " );
+						Option = UserInput.KeyboardReadString();
+
+						if (UserInput.IsNumber(Option))
+						{
+							if( -1 < Float.valueOf(Option).floatValue() < 2){
+								Error = false;
+								Act_Dea = Integer.parseInt(Option);;
+								Monitor.eventSensor(WindowState+DoorState+"M"+Act_Dea);
+							}
+							
+
+						} else {
+
+							System.out.println( "Not a valid option, please try again..." );
+
+						} // if
+
+					} // while
 
 
 				} // if
