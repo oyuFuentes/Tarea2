@@ -67,7 +67,7 @@ class ECSSecurityMonitor extends Thread
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		
-		String CurrentState = "";		// Current temperature alarm
+		String CurrentState = "";		// Current security alarms
 		
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
@@ -109,8 +109,8 @@ class ECSSecurityMonitor extends Thread
 
 			while ( !Done )
 			{
-				if(!isActive)
-					break;
+
+
 					
 				// Here we get our event queue from the event manager
 
@@ -189,30 +189,53 @@ class ECSSecurityMonitor extends Thread
 
 				} // for
 
-				if(CurrentState.equals("S2")){ //Window
-					mw.WriteMessage("Security:: Window broken: False");
-					wi.SetLampColorAndMessage("Window OK", 1); // Window is ok
-				}				
-				else{
-					mw.WriteMessage("Security:: ¡ALERT! Window broken");												
-					wi.SetLampColorAndMessage("Window OK", 3); // Window is broken
+				if(isActive){
+					
+					for (String choice: Str.split("-")){
+
+						if(choice.equals("W1")){ //Window
+
+							mw.WriteMessage("Security:: ¡ALERT! Window broken");												
+							wi.SetLampColorAndMessage("Window OK", 3); // Window is broken
+
+						} 
+						if (choice.equals("W0")){
+
+							mw.WriteMessage("Security:: Window broken: False");
+							wi.SetLampColorAndMessage("Window OK", 1); // Window is ok
+
+						}
+						
+						if(choice.equals("D1")){
+
+							mw.WriteMessage("Security:: ¡ALERT! Door broken");
+							di.SetLampColorAndMessage("Door OK", 3); // Door is broken
+
+						} 
+						if(choice.equals("D0")) {
+
+							mw.WriteMessage("Security:: Door broken: False");
+							di.SetLampColorAndMessage("Door OK", 1); // Door is ok
+
+						}								
+						
+						if(choice.equals("M1")){
+
+							mw.WriteMessage("Security:: ¡ALERT! Movement detection");
+							mi.SetLampColorAndMessage("Movement OK", 3); // Movement detection
+
+						} 
+						if(choice.equals("M0")) {
+
+							mw.WriteMessage("Security:: Movement detection: False");
+							mi.SetLampColorAndMessage("Movement OK", 1); // Movement is ok
+
+						}
+
+					}
+
 				}
-				if(CurrentState.equals("S3")){
-					mw.WriteMessage("Security:: Door broken: False");
-					di.SetLampColorAndMessage("Door OK", 1); // Door is ok
-				}					
-				else{
-					mw.WriteMessage("Security:: ¡ALERT! Door broken");
-					di.SetLampColorAndMessage("Door OK", 3); // Door is broken
-				}								
-				if(CurrentState.equals("S4")){
-					mw.WriteMessage("Security:: Movement detection: False");
-					mi.SetLampColorAndMessage("Movement OK", 1); // Movement is ok
-				}				
-				else{
-					mw.WriteMessage("Security:: ¡ALERT! Movement detection");
-					mi.SetLampColorAndMessage("Movement OK", 3); // Movement detection
-				}									
+													
 								
 				// This delay slows down the sample rate to Delay milliseconds
 
@@ -298,12 +321,40 @@ class ECSSecurityMonitor extends Thread
 	
 	public void Activate()
 	{
+		mw.WriteMessage( "***ACTIVATE MESSAGE RECEIVED - ACTIVATING SYSTEM***" );
+
 		isActive = true;		
 	} // Activate
 	
 	public void Desactivate()
 	{
+		mw.WriteMessage( "***DESACTIVATE MESSAGE RECEIVED - DESACTIVATING SYSTEM***" );
+
 		isActive = false;
 	} // Desactivate
+
+	public void eventSensor(String messageTxt)
+	{
+		// Here we create the event.
+
+		Event evt;
+
+		evt = new Event( (int) 6, messageTxt );
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			em.SendEvent( evt );
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending halt message:: " + e);
+
+		} // catch
+
+	} // Halt
 	
 } // ECSMonitor
