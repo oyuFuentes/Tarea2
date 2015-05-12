@@ -9,14 +9,11 @@ class ECSSecurityMonitor extends Thread
 {
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
-//	private float TempRangeHigh = 100;		// These parameters signify the temperature and humidity ranges in terms
-//	private float TempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
-//	private float HumiRangeHigh = 100;		// this temperature and humidity. Temperatures are in degrees Fahrenheit
-//	private float HumiRangeLow = 0;			// and humidity is in relative humidity percentage.
-//	boolean Registered = true;				// Signifies that this class is registered with an event manager.
+	boolean Registered = true;				// Signifies that this class is registered with an event manager.	
 	MessageWindow mw = null;				// This is the message window
-//	Indicator ti;							// Temperature indicator
-//	Indicator hi;							// Humidity indicator
+	Indicator wi;							// Window broken indicator
+	Indicator di;							// Door broken indicator
+	Indicator mi;							// Movement detection indicator
 
 	public ECSSecurityMonitor()
 	{
@@ -68,8 +65,9 @@ class ECSSecurityMonitor extends Thread
 		Event Evt = null;				// Event object
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
-		float CurrentTemperature = 0;	// Current temperature as reported by the temperature sensor
-		float CurrentHumidity= 0;		// Current relative humidity as reported by the humidity sensor
+		
+		String CurrentState = "";		// Current temperature alarm
+		
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
@@ -83,10 +81,12 @@ class ECSSecurityMonitor extends Thread
 			// This panel is placed in the upper left hand corner and the status 
 			// indicators are placed directly to the right, one on top of the other
 
-			mw = new MessageWindow("ECS Monitoring Console", 0, 0);
-			ti = new Indicator ("TEMP UNK", mw.GetX()+ mw.Width(), 0);
-			hi = new Indicator ("HUMI UNK", mw.GetX()+ mw.Width(), (int)(mw.Height()/2), 2 );
-
+			mw = new MessageWindow("ECS Security Monitoring Console", 0, 0);
+			
+			wi = new Indicator ("Window Broken",mw.GetX()+ mw.Width(), 0);			
+			di = new Indicator ("Door Broken", mw.GetX()+ mw.Width(), 0);
+			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), mw.Height(), 2 );
+						
 			mw.WriteMessage( "Registered with the event manager." );
 
 	    	try
@@ -137,39 +137,22 @@ class ECSSecurityMonitor extends Thread
 				{
 					Evt = eq.GetEvent();
 
-					if ( Evt.GetEventId() == 1 ) // Temperature reading
+					if ( Evt.GetEventId() == 3 ) // Security reading
 					{
 						try
 						{
-							CurrentTemperature = Float.valueOf(Evt.GetMessage()).floatValue();
+							CurrentState = Evt.GetMessage();
 
 						} // try
 
 						catch( Exception e )
 						{
-							mw.WriteMessage("Error reading temperature: " + e);
+							mw.WriteMessage("Error reading security alarm: " + e);
 
 						} // catch
 
 					} // if
-
-					if ( Evt.GetEventId() == 2 ) // Humidity reading
-					{
-						try
-						{
-				
-							CurrentHumidity = Float.valueOf(Evt.GetMessage()).floatValue();
-
-						} // try
-
-						catch( Exception e )
-						{
-							mw.WriteMessage("Error reading humidity: " + e);
-
-						} // catch
-
-					} // if
-
+					
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
@@ -195,66 +178,38 @@ class ECSSecurityMonitor extends Thread
 						// Get rid of the indicators. The message panel is left for the
 						// user to exit so they can see the last message posted.
 
-						hi.dispose();
-						ti.dispose();
-
+						wi.dispose();
+						di.dispose();
+						mi.dispose();							
 					} // if
 
 				} // for
 
-				mw.WriteMessage("Temperature:: " + CurrentTemperature + "F  Humidity:: " + CurrentHumidity );
-
-				// Check temperature and effect control as necessary
-
-				if (CurrentTemperature < TempRangeLow) // temperature is below threshhold
-				{
-					ti.SetLampColorAndMessage("TEMP LOW", 3);
-					Heater(ON);
-					Chiller(OFF);
-
-				} else {
-
-					if (CurrentTemperature > TempRangeHigh) // temperature is above threshhold
-					{
-						ti.SetLampColorAndMessage("TEMP HIGH", 3);
-						Heater(OFF);
-						Chiller(ON);
-
-					} else {
-
-						ti.SetLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
-						Heater(OFF);
-						Chiller(OFF);
-
-					} // if
-				} // if
-
-				// Check humidity and effect control as necessary
-
-				if (CurrentHumidity < HumiRangeLow)
-				{
-					hi.SetLampColorAndMessage("HUMI LOW", 3); // humidity is below threshhold
-					Humidifier(ON);
-					Dehumidifier(OFF);
-
-				} else {
-
-					if (CurrentHumidity > HumiRangeHigh) // humidity is above threshhold
-					{
-						hi.SetLampColorAndMessage("HUMI HIGH", 3);
-						Humidifier(OFF);
-						Dehumidifier(ON);
-
-					} else {
-
-						hi.SetLampColorAndMessage("HUMI OK", 1); // humidity is within threshhold
-						Humidifier(OFF);
-						Dehumidifier(OFF);
-
-					} // if
-
-				} // if
-
+				if(CurrentState.equals("S2")){ //Window
+					mw.WriteMessage("Security:: Window broken: False");
+					wi.SetLampColorAndMessage("TEMP OK", 1); // Window is ok
+				}				
+				else{
+					mw.WriteMessage("Security:: ¡ALERT! Window broken");												
+					wi.SetLampColorAndMessage("TEMP OK", 3); // Window is broken
+				}
+				if(CurrentState.equals("S3")){
+					mw.WriteMessage("Security:: Door broken: False");
+					di.SetLampColorAndMessage("TEMP OK", 1); // Door is ok
+				}					
+				else{
+					mw.WriteMessage("Security:: ¡ALERT! Door broken");
+					di.SetLampColorAndMessage("TEMP OK", 3); // Door is broken
+				}								
+				if(CurrentState.equals("S4")){
+					mw.WriteMessage("Security:: Movement detection: False");
+					mi.SetLampColorAndMessage("TEMP OK", 1); // Movement is ok
+				}				
+				else{
+					mw.WriteMessage("Security:: ¡ALERT! Movement detection");
+					mi.SetLampColorAndMessage("TEMP OK", 3); // Movement detection
+				}									
+								
 				// This delay slows down the sample rate to Delay milliseconds
 
 				try
@@ -297,48 +252,7 @@ class ECSSecurityMonitor extends Thread
 
 	} // SetTemperatureRange
 
-	/***************************************************************************
-	* CONCRETE METHOD:: SetTemperatureRange
-	* Purpose: This method sets the temperature range
-	*
-	* Arguments: float lowtemp - low temperature range
-	*			 float hightemp - high temperature range
-	*
-	* Returns: none
-	*
-	* Exceptions: None
-	*
-	***************************************************************************/
-
-	public void SetTemperatureRange(float lowtemp, float hightemp )
-	{
-		TempRangeHigh = hightemp;
-		TempRangeLow = lowtemp;
-		mw.WriteMessage( "***Temperature range changed to::" + TempRangeLow + "F - " + TempRangeHigh +"F***" );
-
-	} // SetTemperatureRange
-
-	/***************************************************************************
-	* CONCRETE METHOD:: SetHumidityRange
-	* Purpose: This method sets the humidity range
-	*
-	* Arguments: float lowhimi - low humidity range
-	*			 float highhumi - high humidity range
-	*
-	* Returns: none
-	*
-	* Exceptions: None
-	*
-	***************************************************************************/
-
-	public void SetHumidityRange(float lowhumi, float highhumi )
-	{
-		HumiRangeHigh = highhumi;
-		HumiRangeLow = lowhumi;
-		mw.WriteMessage( "***Humidity range changed to::" + HumiRangeLow + "% - " + HumiRangeHigh +"%***" );
-
-	} // SetTemperatureRange
-
+	
 	/***************************************************************************
 	* CONCRETE METHOD:: Halt
 	* Purpose: This method posts an event that stops the environmental control
@@ -377,189 +291,5 @@ class ECSSecurityMonitor extends Thread
 		} // catch
 
 	} // Halt
-
-	/***************************************************************************
-	* CONCRETE METHOD:: Heater
-	* Purpose: This method posts events that will signal the temperature
-	*		   controller to turn on/off the heater
-	*
-	* Arguments: boolean ON(true)/OFF(false) - indicates whether to turn the
-	*			 heater on or off.
-	*
-	* Returns: none
-	*
-	* Exceptions: Posting to event manager exception
-	*
-	***************************************************************************/
-
-	private void Heater( boolean ON )
-	{
-		// Here we create the event.
-
-		Event evt;
-
-		if ( ON )
-		{
-			evt = new Event( (int) 5, "H1" );
-
-		} else {
-
-			evt = new Event( (int) 5, "H0" );
-
-		} // if
-
-		// Here we send the event to the event manager.
-
-		try
-		{
-			em.SendEvent( evt );
-
-		} // try
-
-		catch (Exception e)
-		{
-			System.out.println("Error sending heater control message:: " + e);
-
-		} // catch
-
-	} // Heater
-
-	/***************************************************************************
-	* CONCRETE METHOD:: Chiller
-	* Purpose: This method posts events that will signal the temperature
-	*		   controller to turn on/off the chiller
-	*
-	* Arguments: boolean ON(true)/OFF(false) - indicates whether to turn the
-	*			 chiller on or off.
-	*
-	* Returns: none
-	*
-	* Exceptions: Posting to event manager exception
-	*
-	***************************************************************************/
-
-	private void Chiller( boolean ON )
-	{
-		// Here we create the event.
-
-		Event evt;
-
-		if ( ON )
-		{
-			evt = new Event( (int) 5, "C1" );
-
-		} else {
-
-			evt = new Event( (int) 5, "C0" );
-
-		} // if
-
-		// Here we send the event to the event manager.
-
-		try
-		{
-			em.SendEvent( evt );
-
-		} // try
-
-		catch (Exception e)
-		{
-			System.out.println("Error sending chiller control message:: " + e);
-
-		} // catch
-
-	} // Chiller
-
-	/***************************************************************************
-	* CONCRETE METHOD:: Humidifier
-	* Purpose: This method posts events that will signal the humidity
-	*		   controller to turn on/off the humidifier
-	*
-	* Arguments: boolean ON(true)/OFF(false) - indicates whether to turn the
-	*			 humidifier on or off.
-	*
-	* Returns: none
-	*
-	* Exceptions: Posting to event manager exception
-	*
-	***************************************************************************/
-
-	private void Humidifier( boolean ON )
-	{
-		// Here we create the event.
-
-		Event evt;
-
-		if ( ON )
-		{
-			evt = new Event( (int) 4, "H1" );
-
-		} else {
-
-			evt = new Event( (int) 4, "H0" );
-
-		} // if
-
-		// Here we send the event to the event manager.
-
-		try
-		{
-			em.SendEvent( evt );
-
-		} // try
-
-		catch (Exception e)
-		{
-			System.out.println("Error sending humidifier control message::  " + e);
-
-		} // catch
-
-	} // Humidifier
-
-	/***************************************************************************
-	* CONCRETE METHOD:: Deumidifier
-	* Purpose: This method posts events that will signal the humidity
-	*		   controller to turn on/off the dehumidifier
-	*
-	* Arguments: boolean ON(true)/OFF(false) - indicates whether to turn the
-	*			 dehumidifier on or off.
-	*
-	* Returns: none
-	*
-	* Exceptions: Posting to event manager exception
-	*
-	***************************************************************************/
-
-	private void Dehumidifier( boolean ON )
-	{
-		// Here we create the event.
-
-		Event evt;
-
-		if ( ON )
-		{
-			evt = new Event( (int) 4, "D1" );
-
-		} else {
-
-			evt = new Event( (int) 4, "D0" );
-
-		} // if
-
-		// Here we send the event to the event manager.
-
-		try
-		{
-			em.SendEvent( evt );
-
-		} // try
-
-		catch (Exception e)
-		{
-			System.out.println("Error sending dehumidifier control message::  " + e);
-
-		} // catch
-
-	} // Dehumidifier
-
+	
 } // ECSMonitor
