@@ -16,9 +16,9 @@ class SecurityController
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
 		boolean WindowState = false;	// Heater state: false == off, true == on
-		boolean DoorState = false;		// Chiller state: false == off, true == on
+		boolean DoorState = false;		// Chiller tate: false == off, true == on
 		boolean	MovementState = false;
-		int	Delay = 2500;				// The loop delay (2.5 seconds)
+		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -239,12 +239,12 @@ class SecurityController
 				{
 					// Set to green, heater is on
 
-					wi.SetLampColorAndMessage("WINDOW ON", 1);
+					wi.SetLampColorAndMessage("WINDOW BROKEN", 3);
 
 				} else {
 
 					// Set to black, heater is off
-					wi.SetLampColorAndMessage("WINDOW OFF", 0);
+					wi.SetLampColorAndMessage("WINDOW OK", 1);
 
 				} // if
 
@@ -252,13 +252,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					di.SetLampColorAndMessage("DOOR ON", 1);
+					di.SetLampColorAndMessage("DOOR BROKEN", 3);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					di.SetLampColorAndMessage("DOOR OFF", 0);
+					di.SetLampColorAndMessage("DOOR OK", 1);
 
 				} // if
 
@@ -266,13 +266,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					mi.SetLampColorAndMessage("Movement ON", 1);
+					mi.SetLampColorAndMessage("MOVEMENT OK", 3);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					mi.SetLampColorAndMessage("Movement OFF", 0);
+					mi.SetLampColorAndMessage("MOVEMENT DETECTION", 1);
 
 				} // if
 
