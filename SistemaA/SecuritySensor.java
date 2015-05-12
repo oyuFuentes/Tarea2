@@ -16,8 +16,7 @@ class SecuritySensor
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
-		String CurrentState = ""; 		// Current state of
-		boolean WindowState = false;	// Heater state: false == off, true == on		
+		boolean WindowState = false;	// Heater state: false == off, true == on
 		boolean DoorState = false;		// Chiller state: false == off, true == on
 		boolean MovementState = false;	// The amount of temperature gained or lost
 		int	Delay = 2500;				// The loop delay (2.5 seconds)
@@ -90,7 +89,7 @@ class SecuritySensor
 
 			mw.WriteMessage("Registered with the event manager." );
 
-			CurrentState = " ";
+			CurrentState = "W0-D0-M0";
 
 	    	try
 	    	{
@@ -146,41 +145,52 @@ class SecuritySensor
 
 					if ( Evt.GetEventId() == -6 )
 					{
-						if (Evt.GetMessage().equalsIgnoreCase("W1")) // heater on
-						{
-							WindowState = true;
+						for (String choice: Evt.GetMessage().split("-")){
 
-						} // if
+							if (choice.equalsIgnoreCase("W1")) // heater on
+							{
+								WindowState = true;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("W0")) // heater off
-						{
-							WindowState = false;
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("W0")) // heater off
+							{
+								WindowState = false;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
-						{
-							DoorState = true;
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("D1")) // chiller on
+							{
+								Doortate = true;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
-						{
-							DoorState = false;
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("D0")) // chiller off
+							{
+								DoorState = false;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
-						{
-							MovementState = true;
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("M1")) // chiller on
+							{
+								Doortate = true;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("M0")) // chiller off
-						{
-							MovementState = false;
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("M0")) // chiller off
+							{
+								DoorState = false;
+
+							} // if
+
+						}
+
+						CurrentState = Evt.GetMessage();
 
 					} // if
 

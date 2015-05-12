@@ -91,8 +91,8 @@ class SecurityController
 			// Put the status indicators under the panel...
 			
 			Indicator wi = new Indicator ("WindowState OFF", mw.GetX(), mw.GetY()+mw.Height());
-			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
-			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
+			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
+			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(ci.Width()*3), mw.GetY()+mw.Height());
 
 			mw.WriteMessage("Registered with the event manager." );
 
@@ -144,71 +144,57 @@ class SecurityController
 
 					if ( Evt.GetEventId() == 6 )
 					{
-						if (Evt.GetMessage().equalsIgnoreCase("W1")) // heater on
-						{
-							WindowState = true;
-							mw.WriteMessage("Received window on event" );
+						
+						for (String choice: Evt.GetMessage().split("-")){
 
-							// Confirm that the message was recieved and acted on
+							if (choice.equalsIgnoreCase("W1")) // heater on
+							{
+								WindowState = true;
+								
 
-							ConfirmMessage( em, "W1" );
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("W0")) // heater off
+							{
+								WindowState = false;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("W0")) // heater off
-						{
-							WindowState = false;
-							mw.WriteMessage("Received window off event" );
+							} // if
 
-							// Confirm that the message was recieved and acted on
+							if (choice.equalsIgnoreCase("D1")) // chiller on
+							{
+								Doortate = true;
+								
 
-							ConfirmMessage( em, "W0" );
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("D0")) // chiller off
+							{
+								DoorState = false;
+								
 
-						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
-						{
-							DoorState = true;
-							mw.WriteMessage("Received door on event" );
+							} // if
 
-							// Confirm that the message was recieved and acted on
+							if (choice.equalsIgnoreCase("M1")) // chiller on
+							{
+								Doortate = true;
+								
 
-							ConfirmMessage( em, "D1" );
+							} // if
 
-						} // if
+							if (choice.equalsIgnoreCase("M0")) // chiller off
+							{
+								DoorState = false;
 
-						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
-						{
-							DoorState = false;
-							mw.WriteMessage("Received door off event" );
+							} // if
 
-							// Confirm that the message was recieved and acted on
+						}
 
-							ConfirmMessage( em, "D0" );
+						mw.WriteMessage("Received security event" );
 
-						} // if
+						// Confirm that the message was recieved and acted on
 
-						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
-						{
-							DoorState = true;
-							mw.WriteMessage("Received movement on event" );
-
-							// Confirm that the message was recieved and acted on
-
-							ConfirmMessage( em, "M1" );
-
-						} // if
-
-						if (Evt.GetMessage().equalsIgnoreCase("M0")) // chiller off
-						{
-							DoorState = false;
-							mw.WriteMessage("Received movement off event" );
-
-							// Confirm that the message was recieved and acted on
-
-							ConfirmMessage( em, "M0" );
-
-						} // if
+						ConfirmMessage( em, Evt.GetMessage());
 
 					} // if
 
@@ -251,26 +237,26 @@ class SecurityController
 				{
 					// Set to green, heater is on
 
-					wi.SetLampColorAndMessage("WINDOW ON", 1);
+					hi.SetLampColorAndMessage("WINDOW ON", 1);
 
 				} else {
 
 					// Set to black, heater is off
-					wi.SetLampColorAndMessage("WINDOW OFF", 0);
+					hi.SetLampColorAndMessage("WINDOW OFF", 0);
 
 				} // if
 
 				if (DoorState)
 				{
-					// Set to green, chill is on
+					// Set to green, chiller is on
 
-					di.SetLampColorAndMessage("DOOR ON", 1);
+					ci.SetLampColorAndMessage("DOOR ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					di.SetLampColorAndMessage("DOOR OFF", 0);
+					ci.SetLampColorAndMessage("DOOR OFF", 0);
 
 				} // if
 
@@ -278,13 +264,13 @@ class SecurityController
 				{
 					// Set to green, chiller is on
 
-					mi.SetLampColorAndMessage("Movement ON", 1);
+					ci.SetLampColorAndMessage("Movement ON", 1);
 
 				} else {
 
 					// Set to black, chiller is off
 
-					mi.SetLampColorAndMessage("Movement OFF", 0);
+					ci.SetLampColorAndMessage("Movement OFF", 0);
 
 				} // if
 
