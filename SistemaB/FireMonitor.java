@@ -4,6 +4,8 @@
 import InstrumentationPackage.*;
 import EventPackage.*;
 import java.util.*;
+import javax.swing.JOptionPane;
+
 //import FireConsole;
 
 class FireMonitor extends Thread
@@ -89,7 +91,7 @@ class FireMonitor extends Thread
 
 			mw = new MessageWindow("Fire Monitoring Console", 0, 0);
 			
-			ai = new Indicator ("Fire Detected: ",mw.GetX()+ mw.Width(), 0);			
+			ai = new Indicator ("  Fire Detected: ",mw.GetX()+ mw.Width(), 0);			
 			si = new Indicator ("Sprayer Working: ", mw.GetX()+ mw.Width(), ai.Height());
 			
 						
@@ -199,14 +201,15 @@ class FireMonitor extends Thread
 
 					if(CurrentState.equalsIgnoreCase("A1")){ //Window
 
-						mw.WriteMessage("Fire:: Â¡ALERT! Fire Detected");												
+						mw.WriteMessage("Fire:: ¡ALERT! Fire Detected");												
 						ai.SetLampColorAndMessage("Fire Detected", 3); // Window is broken
 						try
 						{
-							fc.confirmSprayer();
-							//Thread.sleep( 15000 );
-							//This.eventFire(9, "S1")
-
+							ConfirmSprayer dialog = new ConfirmSprayer();
+							int op = dialog.showConfirmDialog("Activar roceadores:");
+							if(op == 0){ //Yes
+								eventFire(9, "S1");
+							}
 						} // try
 
 						catch( Exception e )
@@ -225,7 +228,7 @@ class FireMonitor extends Thread
 					
 					if(CurrentState.equalsIgnoreCase("S1")){
 
-						mw.WriteMessage("Fire:: Â¡ALERT! Sprayers Activated");
+						mw.WriteMessage("Fire:: ¡ALERT! Sprayers Activated");
 						si.SetLampColorAndMessage("Sprayer ON", 3); // Door is broken
 
 					} 

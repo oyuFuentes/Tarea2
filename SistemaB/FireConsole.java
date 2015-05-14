@@ -9,7 +9,7 @@ import java.util.*;
 
 public class FireConsole {
 
-	String optionS = "";
+	String optionS = "";		
 
 	public static void main(String args[])
 	{
@@ -40,7 +40,7 @@ public class FireConsole {
 
 		} // if
 
-		Monitor.setFireConsole(FireConsole);
+//		Monitor.setFireConsole(fc);
 
 		// Here we check to see if registration worked. If ef is null then the
 		// event manager interface was not properly created.
@@ -70,6 +70,8 @@ public class FireConsole {
 				System.out.println( "X: Stop System\n" );
 				System.out.print( "\n>>>> " );
 				Option = UserInput.KeyboardReadString();
+				
+					
 
 				//////////// option 1 ////////////
 
@@ -114,10 +116,7 @@ public class FireConsole {
 								Act_Dea = Integer.parseInt(Option);								
 								AlarmState = "A"+Act_Dea;
 								Monitor.eventFire(-8,AlarmState);							
-
-
-							}
-							
+							}							
 
 						} else {
 
