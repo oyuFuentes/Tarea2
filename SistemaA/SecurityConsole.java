@@ -126,7 +126,7 @@ public class SecurityConsole {
 								Error = false;
 								Act_Dea = Integer.parseInt(Option);								
 								WindowState = "W"+Act_Dea;
-								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);								
+								Monitor.eventSensor(WindowState);								
 
 
 							}
@@ -160,7 +160,7 @@ public class SecurityConsole {
 								Act_Dea = Integer.parseInt(Option);
 								
 								DoorState = "D"+Act_Dea;
-								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);								
+								Monitor.eventSensor(DoorState);								
 							}
 							
 
@@ -191,7 +191,7 @@ public class SecurityConsole {
 								Error = false;
 								Act_Dea = Integer.parseInt(Option);;
 								MovementState ="M"+Act_Dea;
-								Monitor.eventSensor(WindowState+"-"+DoorState+"-"+MovementState);
+								Monitor.eventSensor(MovementState);
 							}
 							
 

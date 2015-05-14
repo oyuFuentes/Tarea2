@@ -1,12 +1,13 @@
 /******************************************************************************************************************
-* File:SecurityController.java
+* File:WindowSensor.java
+*
 *
 ******************************************************************************************************************/
 import InstrumentationPackage.*;
 import EventPackage.*;
 import java.util.*;
 
-class SecurityController
+class WindowSensor
 {
 	public static void main(String args[])
 	{
@@ -15,10 +16,9 @@ class SecurityController
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
-		boolean WindowState = false;	// Heater state: false == off, true == on
-		boolean DoorState = false;		// Chiller tate: false == off, true == on
-		boolean	MovementState = false;
-		int	Delay = 1000;				// The loop delay (1 second)
+		String CurrentState;			// The current state
+		boolean WindowState = false;		// Chiller state: false == off, true == on
+		int	Delay = 2500;				// The loop delay (2.5 seconds)
 		boolean Done = false;			// Loop termination flag
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -71,30 +71,24 @@ class SecurityController
 
 		// Here we check to see if registration worked. If ef is null then the
 		// event manager interface was not properly created.
+	
 
 		if (em != null)
 		{
-			System.out.println("Registered with the event manager." );
 
-			/* Now we create the temperature control status and message panel
-			** We put this panel about 1/3 the way down the terminal, aligned to the left
-			** of the terminal. The status indicators are placed directly under this panel
-			*/
-
-			float WinPosX = 0.0f; 	//This is the X position of the message window in terms 
+			// We create a message window. Note that we place this panel about 1/2 across 
+			// and 1/3 down the screen			
+			
+			float WinPosX = 0.5f; 	//This is the X position of the message window in terms 
 								 	//of a percentage of the screen height
-			float WinPosY = 0.3f; 	//This is the Y position of the message window in terms 
+			float WinPosY = 0.3f; 	//This iwas the Y position of the message window in terms 
 								 	//of a percentage of the screen height 
 			
-			MessageWindow mw = new MessageWindow("Security Controller Status Console", WinPosX, WinPosY);
-			
-			// Put the status indicators under the panel...
-			
-			Indicator wi = new Indicator ("WindowState OFF", mw.GetX(), mw.GetY()+mw.Height());
-			Indicator di = new Indicator ("DoorState OFF", mw.GetX()+(wi.Width()*3), mw.GetY()+mw.Height());
-			Indicator mi = new Indicator ("MovementState OFF", mw.GetX()+(di.Width()*6), mw.GetY()+mw.Height());
+			MessageWindow mw = new MessageWindow("Window Sensor", WinPosX, WinPosY );
 
 			mw.WriteMessage("Registered with the event manager." );
+
+			CurrentState = "W0";
 
 	    	try
 	    	{
@@ -105,7 +99,7 @@ class SecurityController
 
 	    	catch (Exception e)
 			{
-				System.out.println("Error:: " + e);
+				mw.WriteMessage("Error:: " + e);
 
 			} // catch
 
@@ -113,8 +107,14 @@ class SecurityController
 			** Here we start the main simulation loop
 			*********************************************************************/
 
+			mw.WriteMessage("Beginning Simulation... ");
+
+
 			while ( !Done )
 			{
+				PostState( em, CurrentState );
+
+				// Get the message queue
 
 				try
 				{
@@ -129,72 +129,37 @@ class SecurityController
 				} // catch
 
 				// If there are messages in the queue, we read through them.
-				// We are looking for EventIDs = 5, this is a request to turn the
-				// heater or chiller on. Note that we get all the messages
+				// We are looking for EventIDs = -5, this means the the heater
+				// or chiller has been turned on/off. Note that we get all the messages
 				// at once... there is a 2.5 second delay between samples,.. so
 				// the assumption is that there should only be a message at most.
 				// If there are more, it is the last message that will effect the
 				// output of the temperature as it would in reality.
 
 				int qlen = eq.GetSize();
-				
-				System.out.println("qlen = "+qlen);
 
 				for ( int i = 0; i < qlen; i++ )
 				{
 					Evt = eq.GetEvent();
 
-					if ( Evt.GetEventId() == 6 )
+					if ( Evt.GetEventId() == -6 )
 					{
-						
 
-						if (choice.equalsIgnoreCase("W1")) // heater on
+						if (choice.equalsIgnoreCase("W1")) // chiller on
 						{
 							WindowState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("W0")) // heater off
+						if (choice.equalsIgnoreCase("W0")) // chiller off
 						{
 							WindowState = false;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("D1")) // chiller on
-						{
-							DoorState = true;
-							
-
-						} // if
-
-						if (choice.equalsIgnoreCase("D0")) // chiller off
-						{
-							DoorState = false;
-							
-
-						} // if
-
-						if (choice.equalsIgnoreCase("M1")) // chiller on
-						{
-							MovementState = true;
-							
-
-						} // if
-
-						if (choice.equalsIgnoreCase("M0")) // chiller off
-						{
-							MovementState = false;
-
-						} // if
-
-
-						mw.WriteMessage("Received security event" );
-
-						// Confirm that the message was recieved and acted on
-
-						ConfirmMessage( em, Evt.GetMessage());
+						CurrentState = Evt.GetMessage();
 
 					} // if
 
@@ -218,61 +183,16 @@ class SecurityController
 
 				    	} // catch
 
-				    	mw.WriteMessage( "\n\nSimulation Stopped. \n");
-
-						// Get rid of the indicators. The message panel is left for the
-						// user to exit so they can see the last message posted.
-
-						wi.dispose();
-						di.dispose();
-						mi.dispose();
+				    	mw.WriteMessage("\n\nSimulation Stopped. \n");
 
 					} // if
 
 				} // for
 
-				// Update the lamp status
 
-				if (WindowState)
-				{
-					// Set to green, heater is on
+				// Here we wait for a 2.5 seconds before we start the next sample
 
-					wi.SetLampColorAndMessage("WINDOW BROKEN", 3);
-
-				} else {
-
-					// Set to black, heater is off
-					wi.SetLampColorAndMessage("WINDOW OK", 1);
-
-				} // if
-
-				if (DoorState)
-				{
-					// Set to green, chiller is on
-
-					di.SetLampColorAndMessage("DOOR BROKEN", 3);
-
-				} else {
-
-					// Set to black, chiller is off
-
-					di.SetLampColorAndMessage("DOOR OK", 1);
-
-				} // if
-
-				if (MovementState)
-				{
-					// Set to green, chiller is on
-
-					mi.SetLampColorAndMessage("MOVEMENT OK", 3);
-
-				} else {
-
-					// Set to black, chiller is off
-
-					mi.SetLampColorAndMessage("MOVEMENT DETECTION", 1);
-
-				} // if
+				//to define CurrrentState
 
 				try
 				{
@@ -282,7 +202,7 @@ class SecurityController
 
 				catch( Exception e )
 				{
-					System.out.println( "Sleep error:: " + e );
+					mw.WriteMessage("Sleep error:: " + e );
 
 				} // catch
 
@@ -296,43 +216,28 @@ class SecurityController
 
 	} // main
 
-	/***************************************************************************
-	* CONCRETE METHOD:: ConfirmMessage
-	* Purpose: This method posts the specified message to the specified event
-	* manager. This method assumes an event ID of -5 which indicates a confirma-
-	* tion of a command.
-	*
-	* Arguments: EventManagerInterface ei - this is the eventmanger interface
-	*			 where the event will be posted.
-	*
-	*			 string m - this is the received command.
-	*
-	* Returns: none
-	*
-	* Exceptions: None
-	*
-	***************************************************************************/
 
-	static private void ConfirmMessage(EventManagerInterface ei, String m )
+	static private void PostState(EventManagerInterface ei, String currentState )
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) -6, m );
+		Event evt = new Event( (int) 3, currentState );
 
 		// Here we send the event to the event manager.
 
 		try
 		{
 			ei.SendEvent( evt );
+			//System.out.println( "Sent Temp Event" );			
 
 		} // try
 
 		catch (Exception e)
 		{
-			System.out.println("Error Confirming Message:: " + e);
+			System.out.println( "Error Posting Security State:: " + e );
 
 		} // catch
 
-	} // PostMessage
+	} // PostState
 
-} // TemperatureController
+} // TemperatureSensor
