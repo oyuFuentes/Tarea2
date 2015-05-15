@@ -205,7 +205,7 @@ class FireMonitor extends Thread
 						ai.SetLampColorAndMessage("Fire Detected", 3); // Window is broken
 						try
 						{
-							ConfirmSprayer dialog = new ConfirmSprayer();
+							ConfirmDialog dialog = new ConfirmDialog();
 							int op = dialog.showConfirmDialog("Activar roceadores:");
 							if(op == 0){ //Yes
 								eventFire(9, "S1");

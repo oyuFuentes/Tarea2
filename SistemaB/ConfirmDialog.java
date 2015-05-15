@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-class ConfirmSprayer {
+class ConfirmDialog {
 
     public static final int YES = 0;
     public static final int NO = -1;
@@ -27,6 +27,7 @@ class ConfirmSprayer {
     private JButton btnYes;
     private JButton btnCancel;    
     private Timer t;
+    
     private void setComponents(){
     	lbTime = new JLabel("Encendiendo rociadores en: 15", JLabel.CENTER);
     	lbQuestion = new JLabel("¿Encender Ahora?", JLabel.CENTER);
@@ -59,9 +60,9 @@ class ConfirmSprayer {
 
             private int counter = 15;
 
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-            	lbTime.setText("Encendiendo rociadores en: "+ --counter);            			                
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+           lbTime.setText("Encendiendo rociadores en: "+ --counter);            			                
             	if (counter < 1) {
             		t.stop();
                     btnYes.doClick();
