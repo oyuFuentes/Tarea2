@@ -10,13 +10,14 @@ public class ServiceConsole {
 
 	public static void main(String args[])
 	{
-    	ServiceConsole sc = new ServiceConsole();
+    	ServiceConsole sc = new ServiceConsole(args);
     	sc.run();
 
   	} // main
 
-  	ServiceConsole{
-
+	private String[] args;
+  	ServiceConsole(String[] args){
+		this.args = args;
   	}
 
   	public void run(){
@@ -64,7 +65,7 @@ public class ServiceConsole {
 				else
 					System.out.println( "Using local event manger \n" );
 
-				System.out.println( "Manipulate Security System "  );
+				System.out.println( "Manipulate ServiceMonitoring System "  );
 				System.out.println( "Select an Option: \n" );
 				System.out.println( "1: Activate" );
 				System.out.println( "2: Deactivate" );

@@ -143,18 +143,18 @@ class ServiceMonitor extends Thread
 						{
 							DeviceState = Evt.GetMessage();
 
-							Sistem.out.println(Evt.GetMessage());
+							System.out.println(Evt.GetMessage());
 
-							String dev = DeviceState.split("-");
+							String[] dev = DeviceState.split("-");
 
 
-							if(devices.contains(dev[0])){
+							//if(devices.contains(dev[0])){
 								//algo
 								//device = devices.get(dev[0]);
 								//device.status = ok;
-							} else {
-								devices.put(dev[0], dev[1]);
-							}
+							//} else {
+							//	devices.put(dev[0], dev[1]);
+							//}
 
 
 						} // try
@@ -197,7 +197,7 @@ class ServiceMonitor extends Thread
 
 				if(isActive){
 					
-					this.eventPing()
+					this.eventPing();
 					// for device d : devices
 					// d.status = off;
 
