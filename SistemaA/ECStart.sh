@@ -3,7 +3,7 @@
 echo "Starting ECS System"
 
 echo "ECS Monitoring Console"
-
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java ECSConsole"'
 %ECHO Starting Temperature Controller Console
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java TemperatureController"'
