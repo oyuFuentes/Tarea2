@@ -71,6 +71,7 @@ class ServiceMonitor extends Thread
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
 		boolean OFF = false;			// Used to turn off Security
+		Map<Integer, String> devices = new HashMap<Integer, String>();
 
 		if (em != null)
 		{
@@ -144,6 +145,18 @@ class ServiceMonitor extends Thread
 
 							Sistem.out.println(Evt.GetMessage());
 
+							String dev = DeviceState.split("-");
+
+
+							if(devices.contains(dev[0])){
+								//algo
+								//device = devices.get(dev[0]);
+								//device.status = ok;
+							} else {
+								devices.put(dev[0], dev[1]);
+							}
+
+
 						} // try
 
 						catch( Exception e )
@@ -185,6 +198,8 @@ class ServiceMonitor extends Thread
 				if(isActive){
 					
 					this.eventPing()
+					// for device d : devices
+					// d.status = off;
 
 				}
 													
