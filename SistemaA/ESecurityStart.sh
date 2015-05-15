@@ -1,3 +1,4 @@
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 echo "ECS Monitoring Security Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecurityConsole"'
 
