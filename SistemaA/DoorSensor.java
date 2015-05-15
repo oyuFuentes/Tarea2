@@ -145,14 +145,14 @@ class DoorSensor
 					if ( Evt.GetEventId() == -6 )
 					{
 
-						if (choice.equalsIgnoreCase("D1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
 						{
 							DoorState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("D0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
 						{
 							DoorState = false;
 							

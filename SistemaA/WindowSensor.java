@@ -145,14 +145,14 @@ class WindowSensor
 					if ( Evt.GetEventId() == -6 )
 					{
 
-						if (choice.equalsIgnoreCase("W1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("W1")) // chiller on
 						{
 							WindowState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("W0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("W0")) // chiller off
 						{
 							WindowState = false;
 							

@@ -148,42 +148,42 @@ class SecurityController
 					{
 						
 
-						if (choice.equalsIgnoreCase("W1")) // heater on
+						if (Evt.GetMessage().equalsIgnoreCase("W1")) // heater on
 						{
 							WindowState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("W0")) // heater off
+						if (Evt.GetMessage().equalsIgnoreCase("W0")) // heater off
 						{
 							WindowState = false;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("D1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
 						{
 							DoorState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("D0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
 						{
 							DoorState = false;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("M1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
 						{
 							MovementState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("M0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("M0")) // chiller off
 						{
 							MovementState = false;
 

@@ -84,7 +84,7 @@ class MovementSensor
 			float WinPosY = 0.3f; 	//This iwas the Y position of the message Movement in terms 
 								 	//of a percentage of the screen height 
 			
-			MessageMovement mw = new MessageMovement("Movement Sensor", WinPosX, WinPosY );
+			MessageWindow mw = new MessageWindow("Movement Sensor", WinPosX, WinPosY );
 
 			mw.WriteMessage("Registered with the event manager." );
 
@@ -145,14 +145,14 @@ class MovementSensor
 					if ( Evt.GetEventId() == -6 )
 					{
 
-						if (choice.equalsIgnoreCase("M1")) // chiller on
+						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
 						{
 							MovementState = true;
 							
 
 						} // if
 
-						if (choice.equalsIgnoreCase("M0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("M0")) // chiller off
 						{
 							MovementState = false;
 							
