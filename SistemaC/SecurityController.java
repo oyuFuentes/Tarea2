@@ -147,62 +147,54 @@ class SecurityController
 					if ( Evt.GetEventId() == 6 )
 					{
 						
-						for (String choice: Evt.GetMessage().split("-")){
 
-							if (choice.equalsIgnoreCase("W1")) // heater on
-							{
-								WindowState = true;
-								
+						if (Evt.GetMessage().equalsIgnoreCase("W1")) // heater on
+						{
+							WindowState = true;
+							
 
-							} // if
+						} // if
 
-							if (choice.equalsIgnoreCase("W0")) // heater off
-							{
-								WindowState = false;
-								
+						if (Evt.GetMessage().equalsIgnoreCase("W0")) // heater off
+						{
+							WindowState = false;
+							
 
-							} // if
+						} // if
 
-							if (choice.equalsIgnoreCase("D1")) // chiller on
-							{
-								DoorState = true;
-								
+						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
+						{
+							DoorState = true;
+							
 
-							} // if
+						} // if
 
-							if (choice.equalsIgnoreCase("D0")) // chiller off
-							{
-								DoorState = false;
-								
+						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
+						{
+							DoorState = false;
+							
 
-							} // if
+						} // if
 
-							if (choice.equalsIgnoreCase("M1")) // chiller on
-							{
-								MovementState = true;
-								
+						if (Evt.GetMessage().equalsIgnoreCase("M1")) // chiller on
+						{
+							MovementState = true;
+							
 
-							} // if
+						} // if
 
-							if (choice.equalsIgnoreCase("M0")) // chiller off
-							{
-								MovementState = false;
+						if (Evt.GetMessage().equalsIgnoreCase("M0")) // chiller off
+						{
+							MovementState = false;
 
-							} // if
+						} // if
 
-						}
 
 						mw.WriteMessage("Received security event" );
 
 						// Confirm that the message was recieved and acted on
 
 						ConfirmMessage( em, Evt.GetMessage());
-
-					} // if
-
-					if ( Evt.GetEventId() == 10 )
-					{
-						PostEcho(em);
 
 					} // if
 
@@ -342,28 +334,5 @@ class SecurityController
 		} // catch
 
 	} // PostMessage
-
-	static private void PostEcho(EventManagerInterface ei)
-	{
-		// Here we create the event.
-
-		Event evt = new Event( (int) 11, "04-SecurityController-Controller_that_Manages_security_sensors" );
-
-		// Here we send the event to the event manager.
-
-		try
-		{
-			ei.SendEvent( evt );
-			//System.out.println( "Sent Temp Event" );			
-
-		} // try
-
-		catch (Exception e)
-		{
-			System.out.println( "Error Posting Echo:: " + e );
-
-		} // catch
-
-	} // PostTemperature
 
 } // TemperatureController
