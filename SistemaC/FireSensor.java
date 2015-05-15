@@ -163,6 +163,12 @@ class FireSensor
 
 					} // if
 
+					if ( Evt.GetEventId() == 10 )
+					{
+						PostEcho(em);
+
+					} // if
+
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
@@ -239,5 +245,28 @@ class FireSensor
 		} // catch
 
 	} // PostState
+
+	static private void PostEcho(EventManagerInterface ei)
+	{
+		// Here we create the event.
+
+		Event evt = new Event( (int) 11, "06-FireSensor-Sensor_that_detects_the_presence_of_fire" );
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			ei.SendEvent( evt );
+			//System.out.println( "Sent Temp Event" );			
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println( "Error Posting Echo:: " + e );
+
+		} // catch
+
+	} // PostTemperature
 
 } // TemperatureSensor
