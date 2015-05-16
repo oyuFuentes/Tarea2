@@ -20,6 +20,7 @@ class DoorSensor
 		boolean DoorState = false;		// Chiller state: false == off, true == on
 		int	Delay = 2500;				// The loop delay (2.5 seconds)
 		boolean Done = false;			// Loop termination flag
+		boolean isActive = true;
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Get the IP address of the event manager
@@ -109,10 +110,12 @@ class DoorSensor
 
 			mw.WriteMessage("Beginning Simulation... ");
 
-
+			
 			while ( !Done )
 			{
-				PostState( em, CurrentState );
+				
+				if(isActive)
+					PostState( em, CurrentState );
 
 				// Get the message queue
 
@@ -155,6 +158,36 @@ class DoorSensor
 						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
 						{
 							DoorState = false;
+							
+
+						} // if
+
+						CurrentState = Evt.GetMessage();
+
+					} // if
+					
+					if(isActive){
+						if ( Evt.GetEventId() == 10 )
+						{
+							PostEcho(em);
+	
+						} // if
+					}
+					
+					
+					if ( Evt.GetEventId() == 12 )
+					{
+
+						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
+						{
+							isActive = true;
+							
+
+						} // if
+
+						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
+						{
+							isActive = false;
 							
 
 						} // if
@@ -239,5 +272,28 @@ class DoorSensor
 		} // catch
 
 	} // PostState
+	
+	static private void PostEcho(EventManagerInterface ei)
+	{
+		// Here we create the event.
+
+		Event evt = new Event( (int) 11, "12-DoorSensor-Sensor that detects the broken doors");
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			ei.SendEvent( evt );
+			//System.out.println( "Sent Temp Event" );			
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println( "Error Posting Echo:: " + e );
+
+		} // catch
+
+	} // PostTemperature
 
 } // TemperatureSensor

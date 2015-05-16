@@ -68,7 +68,7 @@ class ServiceMonitor extends Thread
 		
 		String DeviceState = "";		// Current security alarms
 		
-		int	Delay = 1000;				// The loop delay (1 second)
+		int	Delay = 200;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
 		boolean OFF = false;			// Used to turn off Security
@@ -145,14 +145,14 @@ class ServiceMonitor extends Thread
 						{
 							DeviceState = Evt.GetMessage();
 
-							System.out.println(Evt.GetMessage());
+							
 
 							String[] dev = DeviceState.split("-");
 							int id = Integer.parseInt(dev[0]);
 							
 							if(devices.containsKey(id)){
 								Componente c = devices.get(id);	
-								
+								c.setStatus("OK");								
 								//table.updateStatus(id, c.getStatus());
 								table.updateStatus(id, c.getStatus()+new Random().nextInt(1000));
 								devices.get(id).setStatus("OFF");
@@ -175,7 +175,7 @@ class ServiceMonitor extends Thread
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
-
+/*
 					if ( Evt.GetEventId() == 99 )
 					{
 						Done = true;
@@ -197,6 +197,8 @@ class ServiceMonitor extends Thread
 						// Get rid of the indicators. The message panel is left for the
 						// user to exit so they can see the last message posted.							
 					} // if
+					
+					*/
 
 				} // for				
 													
@@ -341,6 +343,31 @@ class ServiceMonitor extends Thread
 		catch (Exception e)
 		{
 			System.out.println("Error sending halt message:: " + e);
+
+		} // catch
+
+	} // Halt
+	
+	public void eventOff(String message)
+	{
+
+		// Here we create the event.
+
+		Event evt;
+
+		evt = new Event( (int) 12, message );
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			em.SendEvent( evt );
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println("Error sending off message:: " + e);
 
 		} // catch
 

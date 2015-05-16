@@ -27,6 +27,7 @@ public class ServiceConsole {
 		String Option = null;				// Menu choice from user
 		boolean Error = false;				// Error flag
 		ServiceMonitor Monitor = null;	// The environmental control system monitor
+		String DoorState = "D1";
 		
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +70,7 @@ public class ServiceConsole {
 				System.out.println( "Select an Option: \n" );
 				System.out.println( "1: Activate" );
 				System.out.println( "2: Deactivate" );
-				
+				System.out.println( "3: Set component" );
 				System.out.println( "X: Stop System\n" );
 				System.out.print( "\n>>>> " );
 				Option = UserInput.KeyboardReadString();
@@ -100,7 +101,37 @@ public class ServiceConsole {
 
 				} // if
 
-				
+				if ( Option.equals( "3" ) )
+				{
+					Error = true;
+
+					while (Error)
+					{
+						System.out.print( "\nEnter 1/0 to activate or deactivate monitor >>> " );
+						Option = UserInput.KeyboardReadString();
+
+						if (UserInput.IsNumber(Option))
+						{
+							int opt = Integer.parseInt(Option);
+							if(opt == 0 || opt == 1){
+								Error = false;
+								int Act_Dea = Integer.parseInt(Option);								
+								DoorState = "D"+Act_Dea;
+								Monitor.eventOff(DoorState);								
+
+							}
+							
+
+						} else {
+
+							System.out.println( "Not a valid option, please try again..." );
+
+						} // if
+
+					} // while
+
+
+				} // if
 
 				//////////// option X ////////////
 
