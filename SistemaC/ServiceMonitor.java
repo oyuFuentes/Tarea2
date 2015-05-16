@@ -224,7 +224,7 @@ class ServiceMonitor extends Thread
 							if(!activeDevices[i]){
 								contOffDevices[i]++;
 								if(contOffDevices[i]>1)
-									table.updateStatus(i, "OFF"+contOffDevices[i]);
+									table.updateStatus(i, "OFF");
 							}else{
 								contOffDevices[i]=0;
 							}								

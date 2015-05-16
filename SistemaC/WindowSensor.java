@@ -162,6 +162,10 @@ class WindowSensor
 						CurrentState = Evt.GetMessage();
 
 					} // if
+					if ( Evt.GetEventId() == 10 )
+					{
+						PostEcho(em);
+					} // if
 
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
@@ -239,5 +243,28 @@ class WindowSensor
 		} // catch
 
 	} // PostState
+	
+		static private void PostEcho(EventManagerInterface ei)
+	{
+		// Here we create the event.
+
+		Event evt = new Event( (int) 11, "11-WindowSensor-Sensor that detects the broken windows");
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			ei.SendEvent( evt );
+			//System.out.println( "Sent Temp Event" );			
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println( "Error Posting Echo:: " + e );
+
+		} // catch
+
+	} // Postecho
 
 } // TemperatureSensor

@@ -105,9 +105,9 @@ public class ServiceConsole {
 
 					while (Error)
 					{
-						System.out.println("1: Set unavailable Door Sensor ");
-						System.out.println("2: Set unavailable Fire Sensor ");
-						System.out.println(">>>> ");
+						System.out.print("\n1: Set unavailable Door Sensor ");
+						System.out.print("\n2: Set unavailable Fire Sensor ");
+						System.out.print("\n>>>> ");
 						
 						Option = UserInput.KeyboardReadString();
 						if (UserInput.IsNumber(Option))

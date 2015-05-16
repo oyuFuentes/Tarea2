@@ -279,7 +279,7 @@ class SprayController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "07-SprayerController-Controller that manage sprayers" );
+		Event evt = new Event( (int) 11, "08-SprayerController-Controller that manage sprayers" );
 
 		// Here we send the event to the event manager.
 

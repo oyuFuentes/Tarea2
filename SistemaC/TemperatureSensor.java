@@ -379,7 +379,7 @@ class TemperatureSensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "09-TemperatureSensore-Sensor that shows temperature levels" );
+		Event evt = new Event( (int) 11, "10-TemperatureSensore-Sensor that shows temperature levels" );
 
 		// Here we send the event to the event manager.
 

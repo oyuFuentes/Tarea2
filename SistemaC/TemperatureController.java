@@ -346,7 +346,7 @@ class TemperatureController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "08-TemperatureController-Controller that shows temperature levels" );
+		Event evt = new Event( (int) 11, "09-TemperatureController-Controller that shows temperature levels" );
 
 		// Here we send the event to the event manager.
 

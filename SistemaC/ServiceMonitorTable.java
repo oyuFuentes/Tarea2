@@ -16,7 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Color;
+import java.awt.Component;
 
 public class ServiceMonitorTable extends JFrame {
 	DefaultTableModel modelo;	
@@ -42,6 +44,7 @@ public class ServiceMonitorTable extends JFrame {
 		setVisible(true);
 	}
 	private void setTable(){
+		tabla.setDefaultRenderer (Object.class, new MiRender());
 		modelo.addColumn("ID");
 		modelo.addColumn("Nombre");
 		modelo.addColumn("Descripcion");
@@ -63,4 +66,23 @@ public class ServiceMonitorTable extends JFrame {
 		modelo.addRow(comp.getRow());					
 	}	
 
+}
+
+class MiRender extends DefaultTableCellRenderer
+{
+   public Component getTableCellRendererComponent(JTable table, Object value,
+      boolean isSelected, boolean hasFocus, int row, int column){
+      super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
+      if ( value.equals("OFF") )
+      {
+         this.setOpaque(true);
+         this.setBackground(Color.RED);
+         this.setForeground(Color.WHITE);
+      } else {
+	     this.setOpaque(true);
+         this.setBackground(Color.WHITE);
+         this.setForeground(Color.BLACK);         
+      }
+      return this;
+   }
 }

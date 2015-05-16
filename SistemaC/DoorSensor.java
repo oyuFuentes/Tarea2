@@ -271,7 +271,7 @@ class DoorSensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "12-DoorSensor-Sensor that detects the broken doors");
+		Event evt = new Event( (int) 11, "02-DoorSensor-Sensor that detects the broken doors");
 
 		// Here we send the event to the event manager.
 
@@ -288,6 +288,6 @@ class DoorSensor
 
 		} // catch
 
-	} // PostTemperature
+	} // Postecho
 
-} // TemperatureSensor
+} 

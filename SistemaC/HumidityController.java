@@ -346,7 +346,7 @@ class HumidityController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "03-HumidityController-Controller that manages the humidity sensors" );
+		Event evt = new Event( (int) 11, "04-HumidityController-Controller that manages the humidity sensors" );
 
 		// Here we send the event to the event manager.
 
