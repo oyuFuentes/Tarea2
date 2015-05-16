@@ -17,7 +17,7 @@ class FireMonitor extends Thread
 	MessageWindow mw = null;				// This is the message window	
 	Indicator ai;							// Alarm indicator
 	Indicator si;							// Sprayer indicator
-	FireConsole fc = null;
+	boolean confirma = true;				// Indica si es necesario mostrar la confirmación
 	
 
 	public FireMonitor()
@@ -199,17 +199,20 @@ class FireMonitor extends Thread
 					
 					
 
-					if(CurrentState.equalsIgnoreCase("A1")){ //Window
+					if(CurrentState.equalsIgnoreCase("A1")){ //
 
 						mw.WriteMessage("Fire:: ¡ALERT! Fire Detected");												
-						ai.SetLampColorAndMessage("Fire Detected", 3); // Window is broken
+						ai.SetLampColorAndMessage("Fire Detected", 3); //
 						try
 						{
-							ConfirmDialog dialog = new ConfirmDialog();
-							int op = dialog.showConfirmDialog("Activar roceadores:");
-							if(op == 0){ //Yes
-								eventFire(9, "S1");
-							}
+							if(confirma){
+								ConfirmDialog dialog = new ConfirmDialog();
+								int op = dialog.showConfirmDialog("Activar roceadores:");
+								if(op == 0){ //Yes
+									eventFire(9, "S1");
+								}
+								confirma = false;
+							}							
 						} // try
 
 						catch( Exception e )
@@ -220,7 +223,7 @@ class FireMonitor extends Thread
 
 					} 
 					if (CurrentState.equalsIgnoreCase("A0")){
-
+						confirma = true;
 						mw.WriteMessage("Fire:: Fire not detected");
 						ai.SetLampColorAndMessage("Room OK", 1); // Window is ok
 
@@ -366,13 +369,4 @@ class FireMonitor extends Thread
 
 	} // Event
 
-	public void setFireConsole(FireConsole fc)
-	{
-		
-		// Here we create the event.
-
-		this.fc = fc;
-
-	} // Event
-	
 } // ECSMonitor

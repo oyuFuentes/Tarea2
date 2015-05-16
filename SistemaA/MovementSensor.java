@@ -81,7 +81,7 @@ class MovementSensor
 			
 			float WinPosX = 0.5f; 	//This is the X position of the message Movement in terms 
 								 	//of a percentage of the screen height
-			float WinPosY = 0.3f; 	//This iwas the Y position of the message Movement in terms 
+			float WinPosY = 0.7f; 	//This iwas the Y position of the message Movement in terms 
 								 	//of a percentage of the screen height 
 			
 			MessageWindow mw = new MessageWindow("Movement Sensor", WinPosX, WinPosY );

@@ -81,7 +81,7 @@ class WindowSensor
 			
 			float WinPosX = 0.5f; 	//This is the X position of the message window in terms 
 								 	//of a percentage of the screen height
-			float WinPosY = 0.3f; 	//This iwas the Y position of the message window in terms 
+			float WinPosY = 0.5f; 	//This iwas the Y position of the message window in terms 
 								 	//of a percentage of the screen height 
 			
 			MessageWindow mw = new MessageWindow("Window Sensor", WinPosX, WinPosY );
