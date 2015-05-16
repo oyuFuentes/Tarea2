@@ -381,7 +381,7 @@ class HumiditySensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "05-HumiditySensor-Sensor_that_detects_humidity_levels" );
+		Event evt = new Event( (int) 11, "04-HumiditySensor-Sensor that detects humidity levels" );
 
 		// Here we send the event to the event manager.
 

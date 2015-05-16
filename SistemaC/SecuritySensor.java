@@ -282,7 +282,7 @@ class SecuritySensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "04-SecuritySensore-Sensor_that_shows_security_Status" );
+		Event evt = new Event( (int) 11, "06-SecuritySensor-Sensor that shows security Status" );
 
 		// Here we send the event to the event manager.
 

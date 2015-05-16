@@ -250,7 +250,7 @@ class FireSensor
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "06-FireSensor-Sensor_that_detects_the_presence_of_fire" );
+		Event evt = new Event( (int) 11, "02-FireSensor-Sensor that detects the presence of fire");
 
 		// Here we send the event to the event manager.
 

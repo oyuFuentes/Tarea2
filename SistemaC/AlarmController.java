@@ -15,7 +15,7 @@ class AlarmController
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
 		EventManagerInterface em = null;// Interface object to the event manager
-		boolean AlarmState = false;	// Alarm state: false == off, true == on
+		boolean AlarmState = false;		// Alarm state: false == off, true == on
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 
@@ -279,7 +279,7 @@ class AlarmController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "09-AlarmController-Controller_that_manages_the_fire_alarm" );
+		Event evt = new Event( (int) 11, "01-AlarmController-Controller that manages the fire alarm" );
 
 		// Here we send the event to the event manager.
 

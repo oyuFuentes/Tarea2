@@ -347,7 +347,7 @@ class SecurityController
 	{
 		// Here we create the event.
 
-		Event evt = new Event( (int) 11, "04-SecurityController-Controller_that_Manages_security_sensors" );
+		Event evt = new Event( (int) 11, "07-SecurityController-Controller that manages security sensors" );
 
 		// Here we send the event to the event manager.
 

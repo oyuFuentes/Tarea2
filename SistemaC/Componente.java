@@ -32,6 +32,14 @@ public class Componente {
 		return status;
 	}
 	
+	public void setStatus(String status){
+		this.status = status;
+	}
+
+	public String toString(){
+		return name+" - "+desc+" - "+status;
+	}
+	
 	public Object[] getRow(){
 		return new Object[]{id, name, desc, status};
 	}

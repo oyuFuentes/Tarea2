@@ -4,6 +4,7 @@
 import InstrumentationPackage.*;
 import EventPackage.*;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 class ServiceMonitor extends Thread
 {
@@ -71,7 +72,8 @@ class ServiceMonitor extends Thread
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
 		boolean OFF = false;			// Used to turn off Security
-		Map<Integer, String> devices = new HashMap<Integer, String>();
+		Map<Integer, Componente> devices = new HashMap<Integer, Componente>();
+		ServiceMonitorTable table = new ServiceMonitorTable("Componentes activos");
 
 		if (em != null)
 		{
@@ -137,7 +139,7 @@ class ServiceMonitor extends Thread
 				{
 					Evt = eq.GetEvent();
 
-					if ( Evt.GetEventId() == 11 ) // Security reading
+					if ( Evt.GetEventId() == 11 ) //adfads
 					{
 						try
 						{
@@ -146,16 +148,17 @@ class ServiceMonitor extends Thread
 							System.out.println(Evt.GetMessage());
 
 							String[] dev = DeviceState.split("-");
-
-
-							//if(devices.contains(dev[0])){
-								//algo
-								//device = devices.get(dev[0]);
-								//device.status = ok;
-							//} else {
-							//	devices.put(dev[0], dev[1]);
-							//}
-
+							int id = Integer.parseInt(dev[0]);
+							
+							if(devices.containsKey(id)){
+								Componente c = devices.get(id);	
+								table.updateStatus(id, c.getStatus());
+								//table.updateStatus(id, "OK");
+							}else{
+								Componente comp = new Componente(id, dev[1], dev[2], "OK");
+								devices.put(id, comp);		
+								table.addComponent(id, comp); 
+							}														
 
 						} // try
 
@@ -193,15 +196,7 @@ class ServiceMonitor extends Thread
 						// user to exit so they can see the last message posted.							
 					} // if
 
-				} // for
-
-				if(isActive){
-					
-					this.eventPing();
-					// for device d : devices
-					// d.status = off;
-
-				}
+				} // for				
 													
 								
 				// This delay slows down the sample rate to Delay milliseconds
@@ -217,6 +212,26 @@ class ServiceMonitor extends Thread
 					System.out.println( "Sleep error:: " + e );
 
 				} // catch
+				
+				if(isActive){
+					Iterator it = devices.entrySet().iterator();
+					while (it.hasNext()) {
+						Map.Entry e = (Map.Entry)it.next();
+						
+						Componente c = (Componente)e.getValue();
+						table.updateStatus(c.getId(), c.getStatus());
+						
+						//if(c.getStatus().equals("Off")){
+						//	table.updateStatus(c.getId(), "Off");
+						//}
+						c.setStatus("Off");
+						
+						//devices.get(c).setStatus("Off");											
+						//JOptionPane.showMessageDialog(null, c);
+					}
+					
+					this.eventPing();
+				}
 
 			} // while
 
