@@ -111,7 +111,8 @@ class HumidityController
 			float WinPosY = 0.60f;	//This is the Y position of the message window in terms 
 								 	//of a percentage of the screen height 
 			
-			MessageWindow mw = new MessageWindow("Jezreel no vale madres", WinPosX, WinPosY);
+			MessageWindow mw = new MessageWindow("Humidity Controller Status Console", WinPosX, WinPosY);
+			
 
 			// Now we put the indicators directly under the humitity status and control panel
 						

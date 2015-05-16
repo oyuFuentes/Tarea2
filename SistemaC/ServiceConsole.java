@@ -27,7 +27,7 @@ public class ServiceConsole {
 		String Option = null;				// Menu choice from user
 		boolean Error = false;				// Error flag
 		ServiceMonitor Monitor = null;	// The environmental control system monitor
-		String DoorState = "D1";
+		String DeviceState = "D1";
 		
 
 		/////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ public class ServiceConsole {
 				System.out.println( "Select an Option: \n" );
 				System.out.println( "1: Activate" );
 				System.out.println( "2: Deactivate" );
-				System.out.println( "3: Set component" );
+				System.out.println( "3: Set unavailable device" );
 				System.out.println( "X: Stop System\n" );
 				System.out.print( "\n>>>> " );
 				Option = UserInput.KeyboardReadString();
@@ -82,9 +82,8 @@ public class ServiceConsole {
 						/* Here we activate security system
 						 * Cuando el sistema esta activado, intrusiones de seguridad
 						   * deben ser reportadas a los operadores a traves  del monitor de seguridad.
-						   */
-							
-					System.out.print( "\n Reportando instrucciones de seguridad>>> " );
+						   */							
+					System.out.print( "\n Reportando dispositivos disponibles>>> " );
 					Monitor.Activate();
 
 				} // if
@@ -98,7 +97,6 @@ public class ServiceConsole {
 					// Simular eventos de seguridad					
 					Monitor.Desactivate();
 
-
 				} // if
 
 				if ( Option.equals( "3" ) )
@@ -107,18 +105,18 @@ public class ServiceConsole {
 
 					while (Error)
 					{
-						System.out.print( "\nEnter 1/0 to activate or deactivate monitor >>> " );
+						System.out.println("1: Set unavailable Door Sensor ");
+						System.out.println("2: Set unavailable Fire Sensor ");
+						System.out.println(">>>> ");
+						
 						Option = UserInput.KeyboardReadString();
-
 						if (UserInput.IsNumber(Option))
 						{
 							int opt = Integer.parseInt(Option);
-							if(opt == 0 || opt == 1){
-								Error = false;
-								int Act_Dea = Integer.parseInt(Option);								
-								DoorState = "D"+Act_Dea;
-								Monitor.eventOff(DoorState);								
-
+							if(opt == 1 || opt == 2){
+								Error = false;								
+								DeviceState = "D"+opt;
+								Monitor.eventOff(DeviceState);
 							}
 							
 

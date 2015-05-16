@@ -8,13 +8,14 @@ import javax.swing.JOptionPane;
 
 class ServiceMonitor extends Thread
 {
-	private EventManagerInterface em = null;// Interface object to the event manager
-	private String EvtMgrIP = null;			// Event Manager IP address
-	boolean Registered = true;				// Signifies that this class is registered with an event manager.	
-	boolean isActive = true;				// Signifies if monitoring security is active
-	MessageWindow mw = null;				// This is the message window	
+	private EventManagerInterface em = null;  // Interface object to the event manager
+	private String EvtMgrIP = null;			  // Event Manager IP address
+	boolean Registered = true;				  // Signifies that this class is registered with an event manager.	
+	boolean isActive = true;				  // Signifies if monitoring security is active
+	MessageWindow mw = null;				  // This is the message window	
+	boolean[] activeDevices = new boolean[30];// List of the devices, true if the device is active
+	int[] contOffDevices = new int[30]; 	  // Counts how many times a device is down
 	
-
 	public ServiceMonitor()
 	{
 		// event manager is on the local system
@@ -144,21 +145,20 @@ class ServiceMonitor extends Thread
 						try
 						{
 							DeviceState = Evt.GetMessage();
-
 							
-
 							String[] dev = DeviceState.split("-");
 							int id = Integer.parseInt(dev[0]);
 							
 							if(devices.containsKey(id)){
 								Componente c = devices.get(id);	
-								c.setStatus("OK");								
-								//table.updateStatus(id, c.getStatus());
-								table.updateStatus(id, c.getStatus()+new Random().nextInt(1000));
-								devices.get(id).setStatus("OFF");
+								activeDevices[id] = true;
+								contOffDevices[id]=0;
+								table.updateStatus(id,"OK");		
 							}else{
 								Componente comp = new Componente(id, dev[1], dev[2], "OK");
-								devices.put(id, comp);		
+								devices.put(id, comp);
+								activeDevices[id] = true;
+								contOffDevices[id]=0;
 								table.addComponent(id, comp); 
 							}																				
 
@@ -214,30 +214,29 @@ class ServiceMonitor extends Thread
 				catch( Exception e )
 				{
 					System.out.println( "Sleep error:: " + e );
-
 				} // catch
 				
-				if(isActive){
-					Iterator it = devices.entrySet().iterator();
-					while (it.hasNext()) {
-						Map.Entry e = (Map.Entry)it.next();
-						
-						Componente c = (Componente)e.getValue();						
-
-						//if(c.getStatus().equals("Off")){
-						//	table.updateStatus(c.getId(), "Off");
-						//}
-						if(contador%100==0){
-							contador =0;
-							c.setStatus("Off");						
-							table.updateStatus(c.getId(), "Off");						
-						
+				if(isActive){					
+					
+					if(contador%15 == 0){
+						contador = 0;
+						for(int i=0; i<30; i++){
+							if(!activeDevices[i]){
+								contOffDevices[i]++;
+								if(contOffDevices[i]>1)
+									table.updateStatus(i, "OFF"+contOffDevices[i]);
+							}else{
+								contOffDevices[i]=0;
+							}								
 						}
-						
-						//devices.get(c).setStatus("Off");											
-						//JOptionPane.showMessageDialog(null, c);
 					}
 					
+					for (int i=0; i<30; i++){
+						if(devices.containsKey(i)){
+							activeDevices[i] = false;
+						}
+					}
+																				
 					this.eventPing();
 				}
 

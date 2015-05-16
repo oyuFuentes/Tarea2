@@ -18,7 +18,7 @@ class DoorSensor
 		EventManagerInterface em = null;// Interface object to the event manager
 		String CurrentState;			// The current state
 		boolean DoorState = false;		// Chiller state: false == off, true == on
-		int	Delay = 2500;				// The loop delay (2.5 seconds)
+		int	Delay = 1000;				// The loop delay (2.5 seconds)
 		boolean Done = false;			// Loop termination flag
 		boolean isActive = true;
 
@@ -178,19 +178,13 @@ class DoorSensor
 					if ( Evt.GetEventId() == 12 )
 					{
 
-						if (Evt.GetMessage().equalsIgnoreCase("D1")) // chiller on
-						{
-							isActive = true;
-							
-
-						} // if
-
-						if (Evt.GetMessage().equalsIgnoreCase("D0")) // chiller off
+						if (Evt.GetMessage().equalsIgnoreCase("D1")) //Desactivar sensor
 						{
 							isActive = false;
-							
-
-						} // if
+						}
+						//else{
+						//	isActive = true;
+						//}						
 
 						CurrentState = Evt.GetMessage();
 

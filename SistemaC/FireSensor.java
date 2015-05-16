@@ -18,8 +18,9 @@ class FireSensor
 		EventManagerInterface em = null;// Interface object to the event manager
 		String CurrentState;			// The current state
 		boolean FireState = false;		// Fire state: false == off, true == on
-		int	Delay = 2500;				// The loop delay (2.5 seconds)
+		int	Delay = 1000;				// The loop delay (2.5 seconds)
 		boolean Done = false;			// Loop termination flag
+		boolean isActive = true;
 
 		/////////////////////////////////////////////////////////////////////////////////
 		// Get the IP address of the event manager
@@ -162,12 +163,26 @@ class FireSensor
 						PostState( em, CurrentState );
 
 					} // if
-
-					if ( Evt.GetEventId() == 10 )
+					
+					if(isActive){
+						if ( Evt.GetEventId() == 10 )
+						{
+							PostEcho(em);	
+						} // if
+					}
+					
+					
+					if ( Evt.GetEventId() == 12 )
 					{
-						PostEcho(em);
+						if (Evt.GetMessage().equalsIgnoreCase("D2")) //Desactivar sensor Fire
+						{
+							isActive = false;
+						}					
+						CurrentState = Evt.GetMessage();
 
 					} // if
+
+
 
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to

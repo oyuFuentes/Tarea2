@@ -111,7 +111,8 @@ class HumidityController
 			float WinPosY = 0.60f;	//This is the Y position of the message window in terms 
 								 	//of a percentage of the screen height 
 			
-			MessageWindow mw = new MessageWindow("Jezreel no vale madres", WinPosX, WinPosY);
+			MessageWindow mw = new MessageWindow("Humidity Controller Status Console", WinPosX, WinPosY);
+			
 
 			// Now we put the indicators directly under the humitity status and control panel
 						
@@ -210,6 +211,12 @@ class HumidityController
 							ConfirmMessage( em, "D0" );
 
 						} // if
+
+					} // if
+
+					if ( Evt.GetEventId() == 10 )
+					{
+						PostEcho(em);
 
 					} // if
 
@@ -334,5 +341,28 @@ class HumidityController
 		} // catch
 
 	} // PostMessage
+
+	static private void PostEcho(EventManagerInterface ei)
+	{
+		// Here we create the event.
+
+		Event evt = new Event( (int) 11, "03-HumidityController-Controller that manages the humidity sensors" );
+
+		// Here we send the event to the event manager.
+
+		try
+		{
+			ei.SendEvent( evt );
+			//System.out.println( "Sent Temp Event" );			
+
+		} // try
+
+		catch (Exception e)
+		{
+			System.out.println( "Error Posting Echo:: " + e );
+
+		} // catch
+
+	} // PostTemperature
 
 } // HumidityControllers
