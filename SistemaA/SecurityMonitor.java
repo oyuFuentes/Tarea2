@@ -191,39 +191,39 @@ class SecurityMonitor extends Thread
 
 				if(isActive){
 					
-					if(choice.equalsIgnoreCase("W1")){ //Window
+					if(Evt.GetMessage().equalsIgnoreCase("W1")){ //Window
 
 						mw.WriteMessage("Security:: ¡ALERT! Window broken");												
 						wi.SetLampColorAndMessage("Window broken", 3); // Window is broken
 
 					} 
-					if (choice.equalsIgnoreCase("W0")){
+					if (Evt.GetMessage().equalsIgnoreCase("W0")){
 
 						mw.WriteMessage("Security:: Window broken: False");
 						wi.SetLampColorAndMessage("Window OK", 1); // Window is ok
 
 					}
 					
-					if(choice.equalsIgnoreCase("D1")){
+					if(Evt.GetMessage().equalsIgnoreCase("D1")){
 
 						mw.WriteMessage("Security:: ¡ALERT! Door broken");
 						di.SetLampColorAndMessage("Door Broken", 3); // Door is broken
 
 					} 
-					if(choice.equalsIgnoreCase("D0")) {
+					if(Evt.GetMessage().equalsIgnoreCase("D0")) {
 
 						mw.WriteMessage("Security:: Door broken: False");
 						di.SetLampColorAndMessage("Door OK", 1); // Door is ok
 
 					}								
 					
-					if(choice.equalsIgnoreCase("M1")){
+					if(Evt.GetMessage().equalsIgnoreCase("M1")){
 
 						mw.WriteMessage("Security:: ¡ALERT! Movement detection");
 						mi.SetLampColorAndMessage("Movement Broken", 3); // Movement detection
 
 					} 
-					if(choice.equalsIgnoreCase("M0")) {
+					if(Evt.GetMessage().equalsIgnoreCase("M0")) {
 
 						mw.WriteMessage("Security:: Movement detection: False");
 						mi.SetLampColorAndMessage("Movement OK", 1); // Movement is ok
