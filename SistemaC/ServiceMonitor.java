@@ -104,11 +104,11 @@ class ServiceMonitor extends Thread
 			/********************************************************************
 			** Here we start the main simulation loop
 			*********************************************************************/
-
+			int contador = 0;
 			while ( !Done )
 			{
 
-
+				contador++;
 					
 				// Here we get our event queue from the event manager
 
@@ -152,13 +152,15 @@ class ServiceMonitor extends Thread
 							
 							if(devices.containsKey(id)){
 								Componente c = devices.get(id);	
-								table.updateStatus(id, c.getStatus());
-								//table.updateStatus(id, "OK");
+								
+								//table.updateStatus(id, c.getStatus());
+								table.updateStatus(id, c.getStatus()+new Random().nextInt(1000));
+								devices.get(id).setStatus("OFF");
 							}else{
 								Componente comp = new Componente(id, dev[1], dev[2], "OK");
 								devices.put(id, comp);		
 								table.addComponent(id, comp); 
-							}														
+							}																				
 
 						} // try
 
@@ -218,13 +220,17 @@ class ServiceMonitor extends Thread
 					while (it.hasNext()) {
 						Map.Entry e = (Map.Entry)it.next();
 						
-						Componente c = (Componente)e.getValue();
-						table.updateStatus(c.getId(), c.getStatus());
-						
+						Componente c = (Componente)e.getValue();						
+
 						//if(c.getStatus().equals("Off")){
 						//	table.updateStatus(c.getId(), "Off");
 						//}
-						c.setStatus("Off");
+						if(contador%100==0){
+							contador =0;
+							c.setStatus("Off");						
+							table.updateStatus(c.getId(), "Off");						
+						
+						}
 						
 						//devices.get(c).setStatus("Off");											
 						//JOptionPane.showMessageDialog(null, c);

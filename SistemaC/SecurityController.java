@@ -335,7 +335,6 @@ class SecurityController
 
 	} // PostMessage
 
-<<<<<<< HEAD
 	static private void PostEcho(EventManagerInterface ei)
 	{
 		// Here we create the event.
@@ -358,7 +357,5 @@ class SecurityController
 		} // catch
 
 	} // PostTemperature
-
-=======
->>>>>>> b59eea9c69a6cedc3c41054ce1045dc69d8dab92
+	
 } // TemperatureController
