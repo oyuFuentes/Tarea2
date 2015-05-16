@@ -190,7 +190,7 @@ class SecurityMonitor extends Thread
 				} // for
 
 				if(isActive){
-					
+					String choice = Evt.GetMessage();
 					if(choice.equalsIgnoreCase("W1")){ //Window
 
 						mw.WriteMessage("Security:: ¡ALERT! Window broken");												
