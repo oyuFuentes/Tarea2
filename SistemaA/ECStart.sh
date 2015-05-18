@@ -21,7 +21,3 @@ osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecuritySens
 
 echo "Starting Security Controller Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecurityController"'
-
-
-
-

@@ -13,12 +13,19 @@ osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java TemperatureS
 echo "Starting Humidity Sensor Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java HumiditySensor"' 
 echo "ECS Monitoring Security Console"
+
+echo "==SECURITY SYSTEM ==========================================="
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecurityConsole"' 
-echo "Starting Security Sensor Console"
-osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecuritySensor"' 
-echo "Starting Security Controller Console"
+echo "Starting Security Controller"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SecurityController"' 
-echo "================================================"
+echo "Starting Security DoorSensor"
+osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java DoorSensor"' 
+echo "Starting Security WindowsSensor"
+osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java WindowSensor"' 
+echo "Starting Security Sensor Console"
+osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java MovementSensor"' 
+
+echo "==FIRE DETECTION ============================================"
 echo "Starting Fire Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java FireConsole"' 
 echo "Starting Alarm Controller Console"
@@ -27,6 +34,6 @@ echo "Starting Spray Controller Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java SprayController"' 
 echo "Starting Fire Sensor"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java FireSensor"' 
-echo "================================================"
+echo "==MONITORING DEVICES========================================="
 echo "Starting Service Console"
 osascript -e 'tell app "Terminal" to do script "cd '${DIR}' && java ServiceConsole"' 
