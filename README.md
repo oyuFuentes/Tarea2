@@ -1,7 +1,10 @@
 # Tarea2-Estilo basado en eventos
 Contiene los sistemas A, B y C.
 
+
 ## How run the systems?
+
+#Windows
 1. Compile all files inside a directory:
 ```
 javac *.java
@@ -34,4 +37,25 @@ EFire.bat
 ```
 EMStart.bat
 EAllStart.bat
+```
+
+#Mac
+
+1. Compile all systems Running this command
+```
+sh compileAll.sh
+```
+
+- **System A:** Start Event Manager and the Security System:
+```
+sh runA.sh
+```
+
+- **System B:** Start Event Manager, and Fire components:
+```
+sh runB.sh
+```
+- **System C:** Start Event Manager, and all others devices
+```
+sh runB.sh
 ```
