@@ -41,21 +41,25 @@ EAllStart.bat
 
 #Mac
 
-1. Compile all systems Running this command
+
+1. Compile all files inside a directory:
 ```
-sh compileAll.sh
+javac *.java
 ```
 
 - **System A:** Start Event Manager and the Security System:
 ```
-sh runA.sh
+sh EMStart.sh
+sh ESecurityStart.sh
 ```
 
 - **System B:** Start Event Manager, and Fire components:
 ```
-sh runB.sh
+sh EMStart.sh
+sh EFireStart.sh
 ```
 - **System C:** Start Event Manager, and all others devices
 ```
-sh runB.sh
+sh EMStart.sh
+sh EAllStart.sh
 ```
