@@ -2,6 +2,11 @@
 Contiene los sistemas A, B y C.
 
 
+###Veriones de java
+Se probo con la version 1.7
+En la version 1.8 de java marca deprecated en el EventManager
+
+
 ## How run the systems?
 
 #Windows
