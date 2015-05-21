@@ -1,6 +1,6 @@
 
 echo "Compilando Todo"
-cd ../SistemaA
+cd SistemaA
 javac *.java
 cd ../SistemaB
 javac *.java
