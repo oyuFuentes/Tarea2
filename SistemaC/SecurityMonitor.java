@@ -189,7 +189,7 @@ class SecurityMonitor extends Thread
 
 				} // for
 
-				if(isActive){
+				if(isActive && Evt.GetMessage() != null){
 					
 					if(Evt.GetMessage().equalsIgnoreCase("W1")){ //Window
 

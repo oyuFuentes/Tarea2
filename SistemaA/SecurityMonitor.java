@@ -86,7 +86,7 @@ class SecurityMonitor extends Thread
 			
 			wi = new Indicator ("Window Broken",mw.GetX()+ mw.Width(), 0);			
 			di = new Indicator ("Door Broken", mw.GetX()+ mw.Width(), wi.Height());
-			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), di.Height()*2);
+			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), di.Height()*2, 2 );
 						
 			mw.WriteMessage( "Registered with the event manager." );
 
@@ -189,7 +189,7 @@ class SecurityMonitor extends Thread
 
 				} // for
 
-				if(isActive){
+				if(isActive && Evt.GetMessage() != null){
 					
 					if(Evt.GetMessage().equalsIgnoreCase("W1")){ //Window
 
