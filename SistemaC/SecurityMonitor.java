@@ -9,9 +9,9 @@ class SecurityMonitor extends Thread
 {
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
-	boolean Registered = true;				// Signifies that this class is registered with an event manager.	
+	boolean Registered = true;				// Signifies that this class is registered with an event manager.
 	boolean isActive = true;				// Signifies if monitoring security is active
-	MessageWindow mw = null;				// This is the message window	
+	MessageWindow mw = null;				// This is the message window
 	Indicator wi;							// Window broken indicator
 	Indicator di;							// Door broken indicator
 	Indicator mi;							// Movement detection indicator
@@ -66,9 +66,9 @@ class SecurityMonitor extends Thread
 		Event Evt = null;				// Event object
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
-		
+
 		String CurrentState = "";		// Current security alarms
-		
+
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
@@ -79,15 +79,15 @@ class SecurityMonitor extends Thread
 			// Now we create the ECS status and message panel
 			// Note that we set up two indicators that are initially yellow. This is
 			// because we do not know if the temperature/humidity is high/low.
-			// This panel is placed in the upper left hand corner and the status 
+			// This panel is placed in the upper left hand corner and the status
 			// indicators are placed directly to the right, one on top of the other
 
 			mw = new MessageWindow("ECS Security Monitoring Console", 0, 0);
-			
-			wi = new Indicator ("Window Broken",mw.GetX()+ mw.Width(), 0);			
+
+			wi = new Indicator ("Window Broken",mw.GetX()+ mw.Width(), 0);
 			di = new Indicator ("Door Broken", mw.GetX()+ mw.Width(), wi.Height());
 			mi = new Indicator ("Movement Detection", mw.GetX()+ mw.Width(), di.Height()*2, 2 );
-						
+
 			mw.WriteMessage( "Registered with the event manager." );
 
 	    	try
@@ -111,7 +111,7 @@ class SecurityMonitor extends Thread
 			{
 
 
-					
+
 				// Here we get our event queue from the event manager
 
 				try
@@ -156,7 +156,7 @@ class SecurityMonitor extends Thread
 						} // catch
 
 					} // if
-					
+
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
@@ -184,45 +184,45 @@ class SecurityMonitor extends Thread
 
 						wi.dispose();
 						di.dispose();
-						mi.dispose();							
+						mi.dispose();
 					} // if
 
 				} // for
 
 				if(isActive){
-					
+
 					if(Evt.GetMessage().equalsIgnoreCase("W1")){ //Window
 
-						mw.WriteMessage("Security:: ¡ALERT! Window broken");												
+						mw.WriteMessage("Security:: ALERT! Window broken");
 						wi.SetLampColorAndMessage("Window broken", 3); // Window is broken
 
-					} 
+					}
 					if (Evt.GetMessage().equalsIgnoreCase("W0")){
 
 						mw.WriteMessage("Security:: Window broken: False");
 						wi.SetLampColorAndMessage("Window OK", 1); // Window is ok
 
 					}
-					
+
 					if(Evt.GetMessage().equalsIgnoreCase("D1")){
 
-						mw.WriteMessage("Security:: ¡ALERT! Door broken");
+						mw.WriteMessage("Security:: ALERT! Door broken");
 						di.SetLampColorAndMessage("Door Broken", 3); // Door is broken
 
-					} 
+					}
 					if(Evt.GetMessage().equalsIgnoreCase("D0")) {
 
 						mw.WriteMessage("Security:: Door broken: False");
 						di.SetLampColorAndMessage("Door OK", 1); // Door is ok
 
-					}								
-					
+					}
+
 					if(Evt.GetMessage().equalsIgnoreCase("M1")){
 
-						mw.WriteMessage("Security:: ¡ALERT! Movement detection");
+						mw.WriteMessage("Security:: ALERT! Movement detection");
 						mi.SetLampColorAndMessage("Movement Broken", 3); // Movement detection
 
-					} 
+					}
 					if(Evt.GetMessage().equalsIgnoreCase("M0")) {
 
 						mw.WriteMessage("Security:: Movement detection: False");
@@ -231,8 +231,8 @@ class SecurityMonitor extends Thread
 					}
 
 				}
-													
-								
+
+
 				// This delay slows down the sample rate to Delay milliseconds
 
 				try
@@ -275,7 +275,7 @@ class SecurityMonitor extends Thread
 
 	} // SetTemperatureRange
 
-	
+
 	/***************************************************************************
 	* CONCRETE METHOD:: Halt
 	* Purpose: This method posts an event that stops the environmental control
@@ -314,14 +314,14 @@ class SecurityMonitor extends Thread
 		} // catch
 
 	} // Halt
-	
+
 	public void Activate()
 	{
 		mw.WriteMessage( "***ACTIVATE MESSAGE RECEIVED - ACTIVATING SYSTEM***" );
 
-		isActive = true;		
+		isActive = true;
 	} // Activate
-	
+
 	public void Desactivate()
 	{
 		mw.WriteMessage( "***DESACTIVATE MESSAGE RECEIVED - DESACTIVATING SYSTEM***" );
@@ -353,5 +353,5 @@ class SecurityMonitor extends Thread
 		} // catch
 
 	} // Halt
-	
+
 } // ECSMonitor
