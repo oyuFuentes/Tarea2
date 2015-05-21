@@ -12,13 +12,13 @@ class FireMonitor extends Thread
 {
 	private EventManagerInterface em = null;// Interface object to the event manager
 	private String EvtMgrIP = null;			// Event Manager IP address
-	boolean Registered = true;				// Signifies that this class is registered with an event manager.	
+	boolean Registered = true;				// Signifies that this class is registered with an event manager.
 	boolean isActive = true;				// Signifies if monitoring security is active
-	MessageWindow mw = null;				// This is the message window	
+	MessageWindow mw = null;				// This is the message window
 	Indicator ai;							// Alarm indicator
 	Indicator si;							// Sprayer indicator
-	boolean confirma = true;				// Indica si es necesario mostrar la confirmación
-	
+	boolean confirma = true;				// Indica si es necesario mostrar la confirmacin
+
 
 	public FireMonitor()
 	{
@@ -26,7 +26,7 @@ class FireMonitor extends Thread
 
 		try
 		{
-			
+
 			// Here we create an event manager interface object. This assumes
 			// that the event manager is on the local machine
 
@@ -51,7 +51,7 @@ class FireMonitor extends Thread
 
 		try
 		{
-			
+
 			// Here we create an event manager interface object. This assumes
 			// that the event manager is NOT on the local machine
 
@@ -72,9 +72,9 @@ class FireMonitor extends Thread
 		Event Evt = null;				// Event object
 		EventQueue eq = null;			// Message Queue
 		int EvtId = 0;					// User specified event ID
-		
+
 		String CurrentState = "";		// Current fire alarms
-		
+
 		int	Delay = 1000;				// The loop delay (1 second)
 		boolean Done = false;			// Loop termination flag
 		boolean ON = true;				// Used to turn Security
@@ -86,15 +86,15 @@ class FireMonitor extends Thread
 			// Now we create the ECS status and message panel
 			// Note that we set up two indicators that are initially yellow. This is
 			// because we do not know if the temperature/humidity is high/low.
-			// This panel is placed in the upper left hand corner and the status 
+			// This panel is placed in the upper left hand corner and the status
 			// indicators are placed directly to the right, one on top of the other
 
 			mw = new MessageWindow("Fire Monitoring Console", 0, 0);
-			
-			ai = new Indicator ("  Fire Detected: ",mw.GetX()+ mw.Width(), 0);			
+
+			ai = new Indicator ("  Fire Detected: ",mw.GetX()+ mw.Width(), 0);
 			si = new Indicator ("Sprayer Working: ", mw.GetX()+ mw.Width(), ai.Height());
-			
-						
+
+
 			mw.WriteMessage( "Registered with the event manager." );
 
 	    	try
@@ -118,7 +118,7 @@ class FireMonitor extends Thread
 			{
 
 
-					
+
 				// Here we get our event queue from the event manager
 
 				try
@@ -163,7 +163,7 @@ class FireMonitor extends Thread
 						} // catch
 
 					} // if
-					
+
 					// If the event ID == 99 then this is a signal that the simulation
 					// is to end. At this point, the loop termination flag is set to
 					// true and this process unregisters from the event manager.
@@ -190,18 +190,18 @@ class FireMonitor extends Thread
 						// user to exit so they can see the last message posted.
 
 						ai.dispose();
-						si.dispose();						
+						si.dispose();
 					} // if
 
 				} // for
 
 				if(isActive){
-					
-					
+
+
 
 					if(CurrentState.equalsIgnoreCase("A1")){ //
 
-						mw.WriteMessage("Fire:: ¡ALERT! Fire Detected");												
+						mw.WriteMessage("Fire:: ALERT! Fire Detected");
 						ai.SetLampColorAndMessage("Fire Detected", 3); //
 						try
 						{
@@ -212,7 +212,7 @@ class FireMonitor extends Thread
 									eventFire(9, "S1");
 								}
 								confirma = false;
-							}							
+							}
 						} // try
 
 						catch( Exception e )
@@ -221,33 +221,33 @@ class FireMonitor extends Thread
 
 						} // catch
 
-					} 
+					}
 					if (CurrentState.equalsIgnoreCase("A0")){
 						confirma = true;
 						mw.WriteMessage("Fire:: Fire not detected");
 						ai.SetLampColorAndMessage("Room OK", 1); // Window is ok
 
 					}
-					
+
 					if(CurrentState.equalsIgnoreCase("S1")){
 
-						mw.WriteMessage("Fire:: ¡ALERT! Sprayers Activated");
+						mw.WriteMessage("Fire:: ALERT! Sprayers Activated");
 						si.SetLampColorAndMessage("Sprayer ON", 3); // Door is broken
 
-					} 
+					}
 					if(CurrentState.equalsIgnoreCase("S0")) {
 
 						mw.WriteMessage("Fire:: Sprayer active: False");
 						si.SetLampColorAndMessage("Sprayer OFF", 1); // Door is ok
 
-					}								
-						
+					}
 
-					
+
+
 
 				}
-													
-								
+
+
 				// This delay slows down the sample rate to Delay milliseconds
 
 				try
@@ -290,7 +290,7 @@ class FireMonitor extends Thread
 
 	} // SetTemperatureRange
 
-	
+
 	/***************************************************************************
 	* CONCRETE METHOD:: Halt
 	* Purpose: This method posts an event that stops the environmental control
@@ -329,14 +329,14 @@ class FireMonitor extends Thread
 		} // catch
 
 	} // Halt
-	
+
 	public void Activate()
 	{
 		mw.WriteMessage( "***ACTIVATE MESSAGE RECEIVED - ACTIVATING SYSTEM***" );
 
-		isActive = true;		
+		isActive = true;
 	} // Activate
-	
+
 	public void Desactivate()
 	{
 		mw.WriteMessage( "***DESACTIVATE MESSAGE RECEIVED - DESACTIVATING SYSTEM***" );
@@ -346,7 +346,7 @@ class FireMonitor extends Thread
 
 	public void eventFire(int event, String messageTxt)
 	{
-		
+
 		// Here we create the event.
 
 		Event evt;
