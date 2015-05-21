@@ -24,7 +24,7 @@ ECStart.bat
 - **System A:** Start Event Manager and the Security System:
 ```
 EMStart.bat
-ESecurity.bat
+ESecurityStart.bat
 ```
 
 - **System B:** Start Event Manager, and Fire components:
