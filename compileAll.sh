@@ -1,5 +1,10 @@
 
-echo "Algo"
-javac -encoding UTF8 SistemaA/*.java
-javac -encoding UTF8 SistemaB/*.java
-javac -encoding UTF8 SistemaC/*.java
+echo "Compilando SistemaA"
+cd SistemaA
+javac *.java
+echo "Compilando SistemaB"
+cd ../SistemaB
+javac *.java
+echo "Compilando SistemaC"
+cd ../SistemaC
+javac *.java
